@@ -1,0 +1,37 @@
+MESIN RAKIT - versi native Android (Kotlin)
+
+Sandbox rakit mesin 2D. Rakit dari nol, bentuk sendiri, lalu dengarkan
+suaranya yang lahir dari susunan part yang kamu pasang.
+
+Yang ada di rilis ini
+- Mesin dan transmisi: 111 part nyata di 11 kategori, dari blok 1 silinder
+  sampai V8, plus mesin rotary wankel 2 dan 3 rotor.
+- Gigi manual 4, 5, dan 6 percepatan dengan bunyi oper gigi, kopling selip
+  waktu mulai jalan, pengereman mesin, dan transmisi matik CVT.
+- 16 preset siap pakai, 5 pengendara, 5 lintasan termasuk Lintasan Lurus
+  khusus buat setting dan tes top speed.
+- Suara disintesis langsung dari rakitan: nada knalpot dari panjang dan
+  diameter pipa, pola ledakan dari jumlah silinder, siulan turbo, isapan
+  udara, ketukan mesin, dan letupan waktu gas ditutup.
+- Gaya knalpot unik: Standar, Racing, Kopong, Chamber 2-Tak, Drumben,
+  Helikopter, Thai Style, dan Vortex.
+- CDI dengan kurva pengapian dan tiga model limiter: halus, keras, dan rotasi.
+- Bengkel Rangka: taruh simpul, tarik pipa, tekuk, atur diameter, ketebalan,
+  dan bahan. Rangka butuh dudukan stang, mesin, dan as roda belakang.
+- Bentuk body bebas: gambar sendiri di grid pakai 12 warna cat, hasilnya
+  jadi bodi kendaraan.
+- Tabrakan merusak part (tingkat sedang): tenaga turun, bisa mogok, dan
+  bisa diservis di bengkel, penuh atau cuma 45 persen.
+- Font kustom, tanpa emoji, semua digambar langsung di kanvas Android.
+
+Cara main
+- BENGKEL: pilih part di palet, ketuk grid buat pasang, geser buat mindah.
+- RANGKA: taruh simpul lalu tarik dari simpul ke simpul.
+- DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
+- JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
+
+Catatan teknis
+- Dibangun dengan Kotlin 2.0 + Android Gradle Plugin, tanpa dependensi
+  pihak ketiga. Audio disintesis langsung memakai AudioTrack (PCM float).
+- Android 6.0 (API 23) ke atas, layar lanskap.
+- Font Chakra Petch dan Barlow Condensed, lisensi SIL Open Font License.
