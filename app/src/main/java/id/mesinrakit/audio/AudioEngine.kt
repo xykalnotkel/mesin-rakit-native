@@ -113,7 +113,7 @@ class AudioEngine {
                     .setChannelMask(android.media.AudioFormat.CHANNEL_OUT_STEREO)
                     .setEncoding(android.media.AudioFormat.ENCODING_PCM_FLOAT)
                     .build())
-            .setBufferSizeInBytes(max(buf, sr / 5 * 8))
+            .setBufferSizeInBytes(max(buf, sr / 12 * 8))
             .setTransferMode(android.media.AudioTrack.MODE_STREAM)
             .build()
         track = t
@@ -178,6 +178,17 @@ class AudioEngine {
         cycN = n
         cycLoad = renderCycle(s.firing, n, false)
         cycIdle = renderCycle(s.firing, n, true)
+        /* siklus diputar ulang dengan kecepatan mengikuti rpm. Supaya tidak
+           muncul aliasing saat rpm tinggi, bagian atasnya disaring dulu. */
+        val potong = min(6000.0, srD * 0.14)
+        lowpass(cycLoad, potong); lowpass(cycLoad, potong)
+        lowpass(cycIdle, potong); lowpass(cycIdle, potong)
+    }
+
+    private fun lowpass(buf: FloatArray, f: Double) {
+        val bq = Biquad()
+        bq.lowpass(srD, f, 0.707)
+        for (i in buf.indices) buf[i] = bq.process(buf[i].toDouble()).toFloat()
     }
 
     private fun renderCycle(firing: DoubleArray, n: Int, idle: Boolean): FloatArray {
