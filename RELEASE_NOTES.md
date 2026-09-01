@@ -30,6 +30,12 @@ Cara main
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
 
+Yang baru di 1.1.0
+- APK sekarang dibangun sebagai rilis dan ditandatangani dengan kunci tetap.
+  Artinya pembaruan bisa langsung ditimpa tanpa harus hapus aplikasi lama,
+  dan berkasnya siap diupload ke Play Store kalau lu mau.
+- Kunci tanda tangannya disimpan di GitHub Secrets, tidak pernah masuk repo.
+
 Yang dibenahi di 1.0.3
 - Audio tidak lagi disentuh sama sekali waktu aplikasi dibuka. Mesin suara
   baru hidup waktu masuk Dyno atau Jalan, jadi kalau ada HP yang menolak

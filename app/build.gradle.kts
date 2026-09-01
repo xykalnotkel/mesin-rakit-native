@@ -11,16 +11,32 @@ android {
         applicationId = "id.mesinrakit"
         minSdk = 23
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.0.3"
+        versionCode = 5
+        versionName = "1.1.0"
         resourceConfigurations += setOf("in", "en")
+    }
+
+    /* Kunci tanda tangan dibaca dari environment. Isinya hanya ada di GitHub
+       Secrets, jadi berkas keystore tidak pernah ikut ke repo. Kalau env-nya
+       kosong (misalnya build di komputer sendiri), APK tetap kebangun
+       memakai kunci debug bawaan. */
+    signingConfigs {
+        create("rilis") {
+            val bekas = System.getenv("KEYSTORE_FILE")
+            if (!bekas.isNullOrBlank()) {
+                storeFile = file(bekas)
+                storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
+                keyAlias = System.getenv("KEY_ALIAS") ?: "mesinrakit"
+                keyPassword = System.getenv("KEY_PASSWORD") ?: ""
+            }
+        }
     }
 
     buildTypes {
         debug { isMinifyEnabled = false }
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("rilis")
         }
     }
 

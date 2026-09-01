@@ -47,8 +47,21 @@ jobs:
           /tmp/kotlinc/kotlinc/bin/kotlinc -cp "$JAR" -d /tmp/outtest $SRC test/TestModel.kt
           java -cp /tmp/outtest:/tmp/kotlinc/kotlinc/lib/kotlin-stdlib.jar TestModelKt
 
-      - name: Build APK debug
-        run: gradle assembleDebug --no-daemon --stacktrace
+      - name: Siapkan kunci tanda tangan
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > /tmp/mesin-rakit.jks
+
+      - name: Build APK release
+        env:
+          KEYSTORE_FILE: /tmp/mesin-rakit.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          gradle assembleRelease --no-daemon --stacktrace
+          rm -f /tmp/mesin-rakit.jks
 
       - name: Siapkan nama berkas
         id: ver
@@ -60,7 +73,7 @@ jobs:
           if [ -z "$V" ]; then V="v1.0.0"; fi
           echo "versi=$V" >> "$GITHUB_OUTPUT"
           mkdir -p out
-          cp app/build/outputs/apk/debug/app-debug.apk "out/mesin-rakit-$V.apk"
+          cp app/build/outputs/apk/release/app-release.apk "out/mesin-rakit-$V.apk"
           ls -lh out
 
       - name: Simpan artefak
