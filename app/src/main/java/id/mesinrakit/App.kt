@@ -344,10 +344,13 @@ class App(val ctx: Context, val view: GameView) {
                 toast.tampil("Clipboard bukan kode MRPACK1", C.RED)
                 false
             } else {
-                Pack.terapkan(this, data)
+                Pack.terapkan(build, data)
                 bangunUlang()
                 simpan()
-                toast.tampil("Desain \"${data.name}\" dipasang", C.GREEN)
+                toast.tampil(
+                    if (data.kind == "part") "Usulan part \"${data.name}\" dipasang sebagai cat body"
+                    else "Desain \"${data.name}\" dipasang",
+                    if (data.kind == "part") C.AMBER else C.GREEN)
                 true
             }
         } catch (e: Exception) {

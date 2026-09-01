@@ -1,6 +1,5 @@
 package id.mesinrakit.data
 
-import id.mesinrakit.App
 import id.mesinrakit.model.Build
 import id.mesinrakit.model.FrameDesign
 import id.mesinrakit.model.Node
@@ -130,8 +129,7 @@ object Pack {
         return d
     }
 
-    fun terapkan(app: App, d: Data) {
-        val b = app.build
+    fun terapkan(b: Build, d: Data) {
         when (d.kind) {
             "body" -> {
                 b.paint.clear()
@@ -144,13 +142,11 @@ object Pack {
                 if (d.name.isNotBlank()) b.name = d.name
             }
             "part" -> {
-                /* usulan part dari web: cat ke grid body supaya tetap kelihatan */
                 if (d.paint.isNotEmpty()) {
                     b.paint.clear()
                     b.paint.putAll(d.paint)
                 }
                 b.colorIdx = d.color
-                app.toast.tampil("Usulan part \"${d.name}\" dipasang sebagai cat body", id.mesinrakit.core.C.AMBER)
             }
             else -> {
                 if (d.items.isNotEmpty()) {
