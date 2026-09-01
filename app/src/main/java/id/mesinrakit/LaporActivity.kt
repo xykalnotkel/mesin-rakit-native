@@ -39,8 +39,8 @@ class LaporActivity : Activity() {
         }
         val jejak = Jejak.baca(this).ifBlank { "(kosong: berhenti sangat awal)" }
         val ringkas = "Jejak terakhir:\n$jejak\n" +
-                      "Tanda aman: ${MainActivity.TANDA_AMAN}\n" +
-                      if (jejak.contains(MainActivity.TANDA_AMAN)) "  SUDAH tercapai\n"
+                      "Tanda aman: ${Jejak.TANDA_AMAN}\n" +
+                      if (jejak.contains(Jejak.TANDA_AMAN)) "  SUDAH tercapai\n"
                       else "  BELUM tercapai (berhenti sebelum frame pertama)\n"
 
         val lay = LinearLayout(this).apply {

@@ -71,7 +71,16 @@ class GameView(ctx: Context) : SurfaceView(ctx), SurfaceHolder.Callback {
             } catch (e: Throwable) {
                 app.catat(e)
             } finally {
-                if (c != null) { try { holder.unlockCanvasAndPost(c) } catch (e: Exception) {} }
+                if (c != null) {
+                    try {
+                        holder.unlockCanvasAndPost(c)
+                        /* cukup sekali: jangan menulis berkas tiap frame */
+                        if (!sudahTandai) {
+                            sudahTandai = true
+                            Jejak.tandai(context, "11 frame pertama selesai")
+                        }
+                    } catch (e: Exception) {}
+                }
             }
             /* jaga supaya maksimal 120 frame per detik */
             val spent = (System.nanoTime() - now) / 1_000_000L

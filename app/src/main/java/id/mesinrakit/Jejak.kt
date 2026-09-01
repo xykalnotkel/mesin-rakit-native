@@ -10,6 +10,9 @@ import android.content.Context
 object Jejak {
     private const val NAMA = "jejak.txt"
 
+    /** penanda bahwa aplikasi sudah berhasil sampai titik aman */
+    const val TANDA_AMAN = "10 boot selesai"
+
     fun bersih(ctx: Context) {
         try { ctx.deleteFile(NAMA) } catch (e: Exception) { }
     }

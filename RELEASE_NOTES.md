@@ -30,6 +30,19 @@ Cara main
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
 
+Yang baru di 1.4.0
+- Layar game dan layar pembuka digabung jadi satu. Layar pembuka terbukti
+  selalu berhasil jalan, jadi sekarang seluruh permainan hidup di dalamnya.
+  Aktivitas kedua dihapus total.
+- Setiap langkah startup sekarang punya penanda sendiri: mulai, flag
+  jendela, lanskap, latar, bilah disembunyikan, font, tampilan, App,
+  sampai boot selesai. Kalau ada yang gagal, laporannya langsung nunjukin
+  di langkah ke berapa.
+- Tombol fisik (Q, E, R, spasi) diperbaiki: tampilan sekarang minta fokus
+  supaya tombolnya nyampe.
+- Berkas Unduhan crash-mesin-rakit.txt sekarang juga ditulis waktu startup
+  gagal, jadi bisa dibaca tanpa perlu membuka aplikasi dua kali.
+
 Yang baru di 1.3.1
 - Dari laporan pemain terbukti bahwa aplikasi mati di dalam super.onCreate,
   sebelum kode kita jalan. Dua setelan yang selama ini ditulis di manifest
