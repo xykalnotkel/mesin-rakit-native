@@ -22,7 +22,18 @@ class MainActivity : android.app.Activity() {
     }
 
     override fun onCreate(b: Bundle?) {
+        /* Penanda sebelum dan sesudah super.onCreate. Kalau hanya penanda
+           "sebelum" yang tercatat, berarti yang bermasalah ada di dalam
+           pembuatan jendela Android, bukan di kode kita. */
+        Jejak.tandai(this, "0a sebelum super.onCreate")
         super.onCreate(b)
+        Jejak.tandai(this, "0b sesudah super.onCreate")
+
+        /* Lanskap dan warna latar dipasang di sini, bukan di manifest dan
+           tema. Kalau ada HP yang menolaknya, cukup dicatat lalu dilewati,
+           tidak sampai mematikan aplikasi. */
+        aturLanskap()
+        aturLatar()
 
         /* Penangkap error dipasang sedini mungkin supaya semua kejadian,
            termasuk yang terjadi di thread gambar dan thread audio, sempat
@@ -79,6 +90,31 @@ class MainActivity : android.app.Activity() {
     }
 
     companion object { const val TANDA_AMAN = "7 boot selesai" }
+
+    private fun aturLanskap() {
+        try {
+            requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            Jejak.tandai(this, "0c lanskap sensor dipasang")
+        } catch (e: Throwable) {
+            Jejak.tandai(this, "! lanskap sensor ditolak: ${e.javaClass.simpleName}")
+            try {
+                requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                Jejak.tandai(this, "0c lanskap biasa dipasang")
+            } catch (x: Throwable) {
+                Jejak.tandai(this, "! lanskap biasa juga ditolak: ${x.javaClass.simpleName}")
+            }
+        }
+    }
+
+    private fun aturLatar() {
+        try {
+            window.setBackgroundDrawable(
+                android.graphics.drawable.ColorDrawable(android.graphics.Color.parseColor("#FF070C14")))
+            Jejak.tandai(this, "0d latar jendela dipasang")
+        } catch (e: Throwable) {
+            Jejak.tandai(this, "! latar jendela gagal: ${e.javaClass.simpleName}")
+        }
+    }
 
     private fun hideBar() {
         if (Build.VERSION.SDK_INT >= 30) {

@@ -30,6 +30,16 @@ Cara main
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
 
+Yang baru di 1.3.1
+- Dari laporan pemain terbukti bahwa aplikasi mati di dalam super.onCreate,
+  sebelum kode kita jalan. Dua setelan yang selama ini ditulis di manifest
+  dan tema sekarang dipasang lewat kode dan dibungkus penangkap error:
+  orientasi lanskap dan warna latar jendela. Kalau ada HP yang menolak
+  salah satunya, sekarang cuma dicatat lalu dilewati, aplikasi tetap jalan.
+- Penanda jejak ditambah sebelum dan sesudah super.onCreate, supaya kalau
+  masih ada masalah, langsung kelihatan apakah itu di pembuatan jendela
+  Android atau di kode kita.
+
 Yang baru di 1.3.0
 - Alat uji mandiri. Sekarang ada ikon kedua di laci aplikasi bernama
   UJI MESIN. Buka ikon itu dan dia akan menguji satu per satu: activity,

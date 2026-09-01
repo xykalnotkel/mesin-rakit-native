@@ -27,10 +27,11 @@
         </activity>
 
         <!-- layar game -->
+        <!-- catatan: orientasi lanskap dan configChanges sengaja tidak
+             ditulis di sini. Keduanya dipasang lewat kode supaya bisa
+             ditangkap kalau ada HP yang menolaknya (lihat MainActivity). -->
         <activity
             android:name="id.mesinrakit.MainActivity"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false" />
 
         <!-- alat uji mandiri, muncul sebagai ikon kedua di laci aplikasi -->

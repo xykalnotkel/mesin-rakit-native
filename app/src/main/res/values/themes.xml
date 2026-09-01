@@ -3,9 +3,10 @@
     <!-- Tema game dibuat sesederhana mungkin. Setelan jendela yang aneh
          (translucent, background khusus) bisa bikin Activity mati di dalam
          super.onCreate sebelum kode kita sempat jalan. -->
-    <style name="TemaMesinRakit" parent="android:style/Theme.Material.NoActionBar.Fullscreen">
-        <item name="android:windowBackground">#FF070C14</item>
-    </style>
+    <!-- Sengaja dikosongkan sampai tinggal parent-nya. Warna latar
+         dipasang lewat kode supaya kalau ada HP yang menolaknya, gak
+         bikin Activity mati di dalam super.onCreate. -->
+    <style name="TemaMesinRakit" parent="android:style/Theme.Material.NoActionBar.Fullscreen" />
 
     <!-- Tema standar tanpa tambahan apa pun, buat pintu masuk -->
     <style name="TemaBiasa" parent="android:style/Theme.Material.NoActionBar.Fullscreen" />
