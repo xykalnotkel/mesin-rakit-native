@@ -31,6 +31,11 @@ class MainActivity : android.app.Activity() {
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
             try { Jejak.tandai(this, "! error: " + (e.javaClass.simpleName ?: "?")) } catch (x: Exception) { }
             try { appRef?.catat(e) } catch (x: Exception) { }
+            /* tulis sendiri juga: kalau errornya terjadi sebelum App jadi,
+               satu-satunya cara supaya pemain bisa melihatnya. */
+            try {
+                Lapor.tulis(this, Lapor.jejak(e) + "\n\n" + Jejak.baca(this))
+            } catch (x: Exception) { }
             bukaLaporan()
             try { bawaan?.uncaughtException(t, e) } catch (x: Exception) { }
             Process.killProcess(Process.myPid())

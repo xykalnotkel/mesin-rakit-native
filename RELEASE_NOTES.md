@@ -30,6 +30,14 @@ Cara main
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
 
+Yang baru di 1.2.1
+- Catatan error sekarang juga ditulis ke folder Unduhan atas nama
+  crash-mesin-rakit.txt. Tidak butuh izin apa pun, dan bisa dibuka
+  langsung dari aplikasi Berkas lalu dibagikan. Ini jalur cadangan
+  seandainya layar laporan di dalam aplikasi tidak sempat muncul.
+- Penangkap error menulis berkasnya sendiri, jadi tetap ada isinya
+  sekalipun error terjadi sebelum komponen aplikasi selesai disiapkan.
+
 Yang baru di 1.2.0
 - Pintu masuk baru yang temanya benar-benar standar Android. Tujuannya satu:
   memastikan layar laporan error selalu bisa muncul, sekalipun layar game

@@ -192,6 +192,9 @@ class App(val ctx: Context, val view: GameView) {
             val dir = ctx.getExternalFilesDir(null)
             if (dir != null) java.io.File(dir, "crash-mesin-rakit.txt").writeText(isi)
         } catch (e: Exception) { }
+        /* salinan di folder Unduhan supaya pemain bisa buka dan kirim
+           sendiri, sekalipun layar laporan di aplikasi tidak muncul. */
+        Lapor.tulis(ctx, isi)
     }
 
     fun muatLog(): String? = try {

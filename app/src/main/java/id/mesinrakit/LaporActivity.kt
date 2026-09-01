@@ -49,7 +49,7 @@ class LaporActivity : Activity() {
             setPadding(28, 28, 28, 28)
         }
         lay.addView(teks("MESIN RAKIT berhenti", 22f, 0xFFFF5A6E.toInt()))
-        lay.addView(teks("Salin isi bawah ini terus kirim ke pembuatnya.", 13f, 0xFF8FA3BC.toInt()))
+        lay.addView(teks("Salin isi bawah ini terus kirim ke pembuatnya. Berkas yang sama juga ada di folder Unduhan atas nama ${Lapor.NAMA}", 13f, 0xFF8FA3BC.toInt()))
         lay.addView(teks(ringkas, 12f, 0xFFFFC266.toInt()))
 
         val rincian = TextView(this).apply {
