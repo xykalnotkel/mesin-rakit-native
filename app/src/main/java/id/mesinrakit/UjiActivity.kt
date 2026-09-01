@@ -24,7 +24,7 @@ import id.mesinrakit.core.C
 import id.mesinrakit.core.T
 import id.mesinrakit.data.PRESETS
 import id.mesinrakit.data.pasangPreset
-import id.mesinrakit.model.Build
+import id.mesinrakit.model.Build as Rakitan
 import id.mesinrakit.model.deriveSpec
 
 /**
@@ -116,7 +116,7 @@ class UjiActivity : Activity() {
             "kanvas ok"
         }
         langkah("5 model mesin") {
-            val b = Build()
+            val b = Rakitan()
             pasangPreset(b, PRESETS[0])
             val s = deriveSpec(b)
             "valid=${s.valid} ${"%.1f".format(s.maxPower)} hp ${"%.1f".format(s.maxTorque)} Nm"
