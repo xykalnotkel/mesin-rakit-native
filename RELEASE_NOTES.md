@@ -30,6 +30,15 @@ Cara main
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
 
+Yang dibenahi di 1.0.2
+- Thread audio tidak lagi memakai prioritas maksimum dan selalu memberi
+  jeda kalau penulisan gagal. Ini biang utama aplikasi tiba-tiba berhenti
+  atau membeku di sebagian HP.
+- Kalau format audio float tidak didukung HP, otomatis turun ke 16 bit.
+- Kalau tetap terjadi error, sekarang pesannya ditampilkan di layar menu
+  dan disimpan di Android/data/id.mesinrakit/files/crash-mesin-rakit.txt
+  supaya gampang dilaporkan.
+
 Catatan teknis
 - Dibangun dengan Kotlin 2.0 + Android Gradle Plugin, tanpa dependensi
   pihak ketiga. Audio disintesis langsung memakai AudioTrack (PCM float).

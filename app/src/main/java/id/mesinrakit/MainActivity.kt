@@ -18,6 +18,11 @@ class MainActivity : android.app.Activity() {
         val app = App(this, view)
         view.app = app
         setContentView(view)
+        val bawaan = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { t, e ->
+            try { app.catat(e) } catch (x: Exception) { }
+            bawaan?.uncaughtException(t, e)
+        }
         app.boot()
     }
 
@@ -47,11 +52,13 @@ class MainActivity : android.app.Activity() {
 
     override fun onResume() {
         super.onResume()
-        view.app.audio.start()
+        try { view.app.audio.start() } catch (e: Exception) { view.app.catat(e) }
     }
 
     override fun onPause() {
-        view.app.audio.pause()
+        /* audio dimatikan total, bukan sekadar dijeda:
+           track yang dijeda bikin thread nulis gagal terus. */
+        try { view.app.audio.stop() } catch (e: Exception) { }
         view.app.simpan()
         super.onPause()
     }

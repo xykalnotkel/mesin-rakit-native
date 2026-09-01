@@ -19,6 +19,7 @@ class MenuScene(app: App) : Scene(app) {
     private var presetKe = 0
     private var bukaPreset = false
     private var bukaBantuan = false
+    private var idLog = -1
 
     override fun draw(c: Canvas, w: Float, h: Float) {
         val s = app.spec
@@ -70,6 +71,7 @@ class MenuScene(app: App) : Scene(app) {
 
         if (bukaPreset) panelPreset(c, w, h)
         if (bukaBantuan) panelBantuan(c, w, h)
+        panelError(c, w, h)
     }
 
     private fun panelPreset(c: Canvas, w: Float, h: Float) {
@@ -114,6 +116,25 @@ class MenuScene(app: App) : Scene(app) {
         tombol(c, "Tutup", x + pw - 100f, y + ph - 46f, 80f, 34f, BTN_NORMAL, T.sp(13f), true, 998)
     }
 
+    /** kalau aplikasi sempat error, tunjukkan supaya bisa dilaporin */
+    private fun panelError(c: Canvas, w: Float, h: Float) {
+        val log = app.errorTeks ?: app.muatLog() ?: return
+        val baris = log.split("\n").filter { it.isNotBlank() }.take(5)
+        val pw = min(w * 0.92f, 900f)
+        val ph = 34f + baris.size * 17f
+        val x = (w - pw) / 2f
+        val y = h - ph - 70f
+        c.rr(x, y, pw, ph, 10f, T.fill(0xCC3B1218.toInt()))
+        c.rrs(x, y, pw, ph, 10f, T.stroke(C.RED, 1.6f))
+        c.tx("Terjadi error (ketuk buat tutup)", x + 12f, y + 22f, T.sp(12f), C.RED, F_BOLD)
+        var yy = y + 40f
+        for (b in baris) {
+            c.tx(b.take(110), x + 12f, yy, T.sp(11f), C.TEXT, F_REG)
+            yy += 17f
+        }
+        idLog = add(x, y, pw, ph)
+    }
+
     override fun press(h: Hot?, x: Float, y: Float) {
         if (h == null) return
         when (h.id) {
@@ -123,6 +144,7 @@ class MenuScene(app: App) : Scene(app) {
             idPit -> app.pindah("pit")
             idPeta -> app.pindah("peta")
             idJalan -> { app.gantiMap(app.mapId); app.mulaiJalan() }
+            idLog -> { app.hapusLog(); idLog = -1 }
             idPreset -> bukaPreset = true
             idBantuan -> bukaBantuan = true
             998 -> bukaBantuan = false

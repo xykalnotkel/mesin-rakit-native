@@ -57,7 +57,7 @@ class GameView(ctx: Context) : SurfaceView(ctx), SurfaceHolder.Callback {
             if (dt < 0.004f) dt = 0.004f
             acc += dt; frames++
             if (acc > 0.5f) { fps = frames / acc; acc = 0f; frames = 0 }
-            app.update(dt)
+            try { app.update(dt) } catch (e: Exception) { app.catat(e) }
             var c: Canvas? = null
             try {
                 c = holder.lockCanvas()
@@ -66,6 +66,7 @@ class GameView(ctx: Context) : SurfaceView(ctx), SurfaceHolder.Callback {
                     app.draw(c, vw, vh)
                 }
             } catch (e: Exception) {
+                app.catat(e)
             } finally {
                 if (c != null) { try { holder.unlockCanvasAndPost(c) } catch (e: Exception) {} }
             }

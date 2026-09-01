@@ -124,6 +124,48 @@ class App(val ctx: Context, val view: GameView) {
 
     fun kembali(): Boolean = scene.tombolKembali()
 
+    /* ---------------- penanganan error ---------------- */
+    var errorTeks: String? = null
+    private val errorSudah = HashSet<String>()
+
+    /** catat error supaya bisa dibaca pemain, bukan cuma bikin aplikasi mati */
+    fun catat(e: Throwable) {
+        try {
+            val kunci = e.toString().take(120)
+            if (errorSudah.contains(kunci)) return
+            errorSudah.add(kunci)
+            val sw = java.io.StringWriter()
+            e.printStackTrace(java.io.PrintWriter(sw))
+            val isi = sw.toString().take(1500)
+            errorTeks = isi
+            simpanLog(isi)
+        } catch (x: Exception) { }
+    }
+
+    fun simpanLog(isi: String) {
+        try {
+            ctx.getSharedPreferences("mesinrakit", Context.MODE_PRIVATE).edit().putString("crash", isi).apply()
+            val dir = ctx.getExternalFilesDir(null)
+            if (dir != null) java.io.File(dir, "crash-mesin-rakit.txt").writeText(isi)
+        } catch (e: Exception) { }
+    }
+
+    fun muatLog(): String? = try {
+        ctx.getSharedPreferences("mesinrakit", Context.MODE_PRIVATE).getString("crash", null)
+    } catch (e: Exception) { null }
+
+    fun hapusLog() {
+        errorTeks = null
+        try {
+            ctx.getSharedPreferences("mesinrakit", Context.MODE_PRIVATE).edit().remove("crash").apply()
+            val dir = ctx.getExternalFilesDir(null)
+            if (dir != null) {
+                val f = java.io.File(dir, "crash-mesin-rakit.txt")
+                if (f.exists()) f.delete()
+            }
+        } catch (e: Exception) { }
+    }
+
     fun getar(ms: Long = 30) {
         try {
             if (android.os.Build.VERSION.SDK_INT >= 31) {

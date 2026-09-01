@@ -15,6 +15,8 @@ import kotlin.math.*
 class AudioEngine {
     private var track: android.media.AudioTrack? = null
     private var thread: Thread? = null
+    private var useFloat = true
+    private var pcm: ShortArray? = null
     @Volatile var running = false
     @Volatile var ready = false
     var sr = 48000
@@ -96,45 +98,78 @@ class AudioEngine {
     /* ---------------- hidupkan ---------------- */
     fun start(): Boolean {
         if (running) return true
-        val native = android.media.AudioTrack.getNativeOutputSampleRate(android.media.AudioFormat.CHANNEL_OUT_STEREO)
-        sr = if (native > 0) native else 48000
+        val native = try {
+            android.media.AudioTrack.getNativeOutputSampleRate(android.media.AudioManager.STREAM_MUSIC)
+        } catch (e: Exception) { 0 }
+        sr = if (native in 8000..192000) native else 48000
         srD = sr.toDouble()
-        val buf = android.media.AudioTrack.getMinBufferSize(
-            sr, android.media.AudioFormat.CHANNEL_OUT_STEREO, android.media.AudioFormat.ENCODING_PCM_FLOAT)
-        val t = android.media.AudioTrack.Builder()
-            .setAudioAttributes(
-                android.media.AudioAttributes.Builder()
-                    .setUsage(android.media.AudioAttributes.USAGE_GAME)
-                    .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build())
-            .setAudioFormat(
-                android.media.AudioFormat.Builder()
-                    .setSampleRate(sr)
-                    .setChannelMask(android.media.AudioFormat.CHANNEL_OUT_STEREO)
-                    .setEncoding(android.media.AudioFormat.ENCODING_PCM_FLOAT)
-                    .build())
-            .setBufferSizeInBytes(max(buf, sr / 12 * 8))
-            .setTransferMode(android.media.AudioTrack.MODE_STREAM)
-            .build()
-        track = t
+        val minF = cariMin(android.media.AudioFormat.ENCODING_PCM_FLOAT)
+        var siap = buka(true, minF)
+        if (!siap) {
+            val minS = cariMin(android.media.AudioFormat.ENCODING_PCM_16BIT)
+            siap = buka(false, minS)
+        }
+        if (!siap) { running = false; ready = false; return false }
         running = true
         ready = true
-        t.play()
-        thread = Thread { loop() }.apply { name = "mesin-audio"; priority = Thread.MAX_PRIORITY; start() }
+        try { track?.play() } catch (e: Exception) { }
+        /* prioritas jangan maksimum: kalau thread ini ngamuk, UI ikut mogok */
+        thread = Thread { loop() }.apply {
+            name = "mesin-audio"
+            priority = Thread.NORM_PRIORITY + 1
+            isDaemon = true
+            start()
+        }
         return true
+    }
+
+    private fun cariMin(enc: Int): Int = try {
+        android.media.AudioTrack.getMinBufferSize(sr, android.media.AudioFormat.CHANNEL_OUT_STEREO, enc)
+    } catch (e: Exception) { -1 }
+
+    private fun buka(pakaiFloat: Boolean, minBuf: Int): Boolean {
+        val enc = if (pakaiFloat) android.media.AudioFormat.ENCODING_PCM_FLOAT
+                  else android.media.AudioFormat.ENCODING_PCM_16BIT
+        val ukuran = max(minBuf, sr / 12 * if (pakaiFloat) 8 else 4)
+        return try {
+            val t = android.media.AudioTrack.Builder()
+                .setAudioAttributes(
+                    android.media.AudioAttributes.Builder()
+                        .setUsage(android.media.AudioAttributes.USAGE_GAME)
+                        .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build())
+                .setAudioFormat(
+                    android.media.AudioFormat.Builder()
+                        .setSampleRate(sr)
+                        .setChannelMask(android.media.AudioFormat.CHANNEL_OUT_STEREO)
+                        .setEncoding(enc)
+                        .build())
+                .setBufferSizeInBytes(ukuran)
+                .setTransferMode(android.media.AudioTrack.MODE_STREAM)
+                .build()
+            if (t.state != android.media.AudioTrack.STATE_INITIALIZED) {
+                try { t.release() } catch (e: Exception) { }
+                return false
+            }
+            track = t
+            useFloat = pakaiFloat
+            pcm = if (pakaiFloat) null else ShortArray(chunk * 2)
+            true
+        } catch (e: Exception) { false }
     }
 
     fun stop() {
         running = false
-        try { thread?.join(400) } catch (e: Exception) {}
+        try { thread?.join(500) } catch (e: Exception) { }
         thread = null
-        try { track?.stop(); track?.release() } catch (e: Exception) {}
+        try { track?.stop() } catch (e: Exception) { }
+        try { track?.release() } catch (e: Exception) { }
         track = null
         ready = false
     }
 
-    fun pause() { try { track?.pause() } catch (e: Exception) {} }
-    fun resume() { try { track?.play() } catch (e: Exception) {} }
+    fun pause() { try { track?.pause() } catch (e: Exception) { } }
+    fun resume() { try { track?.play() } catch (e: Exception) { } }
 
     /* ---------------- pasang spesifikasi baru ---------------- */
     fun setSpec(s: Spec) {
@@ -416,7 +451,26 @@ class AudioEngine {
                 out[i * 2 + 1] = v
                 t += 1.0 / sr
             }
-            try { track?.write(out, 0, out.size, android.media.AudioTrack.WRITE_BLOCKING) } catch (e: Exception) { }
+            val terkirim = try {
+                if (useFloat) {
+                    track?.write(out, 0, out.size, android.media.AudioTrack.WRITE_BLOCKING)
+                } else {
+                    val p = pcm
+                    if (p != null) {
+                        for (i in 0 until chunk) {
+                            val v = (mono[i] * 32000f).toInt().coerceIn(-32768, 32767).toShort()
+                            p[i * 2] = v
+                            p[i * 2 + 1] = v
+                        }
+                        track?.write(p, 0, p.size, android.media.AudioTrack.WRITE_BLOCKING)
+                    } else -1
+                }
+            } catch (e: Exception) { -1 }
+            /* kalau gagal nulis (track mati, dijeda, atau belum siap), jangan
+               muter terus tanpa jeda: itu bikin seluruh aplikasi mogok. */
+            if (terkirim == null || terkirim <= 0) {
+                try { Thread.sleep(6) } catch (e: Exception) { }
+            }
             synchronized(waveLock) {
                 val stepSize = chunk / waveBuf.size
                 for (i in waveBuf.indices) waveBuf[i] = mono[i * stepSize]
