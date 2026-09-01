@@ -161,15 +161,34 @@ class App(val ctx: Context, val view: GameView) {
             errorSudah.add(kunci)
             val sw = java.io.StringWriter()
             e.printStackTrace(java.io.PrintWriter(sw))
-            val isi = sw.toString().take(1500)
+            val isi = infoPerangkat() + "\n" + sw.toString().take(2500)
             errorTeks = isi
             simpanLog(isi)
         } catch (x: Exception) { }
     }
 
+    /** keterangan perangkat, biar gampang menebak penyebabnya */
+    fun infoPerangkat(): String = try {
+        "Perangkat : ${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}\n" +
+        "Android   : ${android.os.Build.VERSION.RELEASE} (API ${android.os.Build.VERSION.SDK_INT})\n" +
+        "Layar     : ${android.os.Build.PRODUCT}\n" +
+        "Versi app : ${ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName}\n" +
+        "Waktu     : ${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.US).format(java.util.Date())}"
+    } catch (e: Exception) { "Perangkat : (tidak diketahui)" }
+
     fun simpanLog(isi: String) {
+        /* penyimpanan internal paling penting: selalu bisa ditulis dan
+           bisa dibaca lagi oleh layar laporan yang jalan di proses lain. */
         try {
-            ctx.getSharedPreferences("mesinrakit", Context.MODE_PRIVATE).edit().putString("crash", isi).apply()
+            ctx.openFileOutput(LaporActivity.NAMA_BERKAS, Context.MODE_PRIVATE).use {
+                it.write(isi.toByteArray())
+            }
+        } catch (e: Exception) { }
+        try {
+            ctx.getSharedPreferences("mesinrakit", Context.MODE_PRIVATE)
+                .edit().putString("crash", isi).apply()
+        } catch (e: Exception) { }
+        try {
             val dir = ctx.getExternalFilesDir(null)
             if (dir != null) java.io.File(dir, "crash-mesin-rakit.txt").writeText(isi)
         } catch (e: Exception) { }
@@ -181,6 +200,7 @@ class App(val ctx: Context, val view: GameView) {
 
     fun hapusLog() {
         errorTeks = null
+        try { ctx.deleteFile(LaporActivity.NAMA_BERKAS) } catch (e: Exception) { }
         try {
             ctx.getSharedPreferences("mesinrakit", Context.MODE_PRIVATE).edit().remove("crash").apply()
             val dir = ctx.getExternalFilesDir(null)

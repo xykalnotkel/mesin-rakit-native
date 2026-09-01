@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:theme="@style/TemaMesinRakit"
-        android:hardwareAccelerated="true"
+        android:hardwareAccelerated="false"
         android:isGame="true"
         android:supportsRtl="false">
 
@@ -29,5 +29,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- layar laporan error, proses terpisah supaya tetap muncul
+             walaupun proses utama sudah dimatikan sistem -->
+        <activity
+            android:name="id.mesinrakit.LaporActivity"
+            android:process=":lapor"
+            android:exported="false"
+            android:label="Laporan Error"
+            android:theme="@style/TemaLapor" />
     </application>
 </manifest>

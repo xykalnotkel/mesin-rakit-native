@@ -28,6 +28,7 @@ class GameView(ctx: Context) : SurfaceView(ctx), SurfaceHolder.Callback {
     var fps = 60f
     private var acc = 0f
     private var frames = 0
+    private var sudahTandai = false
 
     init { holder.addCallback(this) }
 
@@ -57,7 +58,9 @@ class GameView(ctx: Context) : SurfaceView(ctx), SurfaceHolder.Callback {
             if (dt < 0.004f) dt = 0.004f
             acc += dt; frames++
             if (acc > 0.5f) { fps = frames / acc; acc = 0f; frames = 0 }
-            try { app.update(dt) } catch (e: Exception) { app.catat(e) }
+            /* Throwable, bukan Exception: OutOfMemoryError dan sejenisnya
+               juga harus tertangkap supaya aplikasi gak mati. */
+            try { app.update(dt) } catch (e: Throwable) { app.catat(e) }
             var c: Canvas? = null
             try {
                 c = holder.lockCanvas()
@@ -65,7 +68,7 @@ class GameView(ctx: Context) : SurfaceView(ctx), SurfaceHolder.Callback {
                     c.drawColor(C.BG)
                     app.draw(c, vw, vh)
                 }
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 app.catat(e)
             } finally {
                 if (c != null) { try { holder.unlockCanvasAndPost(c) } catch (e: Exception) {} }

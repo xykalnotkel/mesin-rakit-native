@@ -56,6 +56,10 @@ fun radarKarakter(c: Canvas, s: id.mesinrakit.model.Spec, cx: Float, cy: Float, 
 /** gambar kendaraan kecil dari susunan part (tampak samping) */
 fun gambarKendaraan(c: Canvas, app: App, cx: Float, cy: Float, w: Float, h: Float, skala: Float = 1f) {
     val s = app.spec
+    /* kalau sumbu roda belum ada (rakitan kosong), jangan digambar:
+       pembagian dengan nol bikin koordinat rusak. */
+    if (!s.wheelbase.isFinite() || s.wheelbase <= 0.01) return
+    if (!fin(cx, cy, w, h) || w <= 0f || h <= 0f) return
     val rr = (s.wheelR * skala * (w / (s.wheelbase * 1.9f))).toFloat()
     val wb = (s.wheelbase * skala * (w / (s.wheelbase * 1.9f))).toFloat()
     val body = C.PAINTS.getOrElse(app.build.colorIdx) { C.ACC }
