@@ -32,8 +32,9 @@ web/                  situs unduhan + studio Drawing (Vercel)
 test/TestModel.kt     uji logika model, jalan langsung di JVM
 ```
 
-Situs: [mesin.xyspace.my.id](https://mesin.xyspace.my.id)
-Studio Drawing mengeluarkan berkas **MRPACK1** yang bisa ditempel di menu game.
+Situs resmi: [mesin.xyspace.my.id](https://mesin.xyspace.my.id)
+Studio Drawing, riwayat rilis, dan lisensi lengkap ada di situs.
+Lisensi bahan pihak ketiga: lihat berkas `LICENSE`.
 
 ## Cara membangun
 

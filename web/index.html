@@ -6,37 +6,38 @@
   <title>MESIN RAKIT — sandbox rakit mesin 2D</title>
   <meta name="description" content="Rakit kendaraan dari nol di Android. Bentuk rangka sendiri, cat bodi, dengar suara mesin yang lahir dari susunan part." />
   <meta property="og:title" content="MESIN RAKIT" />
-  <meta property="og:description" content="Sandbox rakit mesin 2D. Native Kotlin, suara disintesis dari rakitan." />
-  <meta property="og:image" content="/assets/og.jpg" />
-  <link rel="icon" href="/assets/logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet" />
+  <meta property="og:description" content="Sandbox rakit mesin 2D. Suara disintesis dari rakitan." />
+  <meta property="og:image" content="/assets/og.webp" />
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
+  <link rel="preload" href="/assets/hero.webp" as="image" type="image/webp" />
+  <link rel="stylesheet" href="/assets/fonts.css" />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
   <nav class="nav">
-    <a class="brand" href="/"><img src="/assets/logo.png" alt="" /> MESIN RAKIT</a>
+    <a class="brand" href="/"><img src="/assets/logo.svg" width="32" height="32" alt="" /> MESIN RAKIT</a>
     <div class="nav-links">
       <a href="/" class="on">Beranda</a>
       <a href="#unduh">Unduh</a>
       <a href="/drawing">Drawing</a>
       <a href="/cara">Cara main</a>
+      <a href="/riwayat">Riwayat</a>
+      <a href="/lisensi">Lisensi</a>
     </div>
-    <a class="btn btn-utama" href="#unduh">Unduh APK</a>
+    <a class="btn btn-utama" href="/api/unduh">Unduh APK</a>
   </nav>
 
   <header class="hero">
-    <img class="bg" src="/assets/hero.jpg" alt="" />
+    <img class="bg" src="/assets/hero.webp" width="1440" height="810" alt="" fetchpriority="high" />
     <div class="hero-inner">
       <div class="kicker">Sandbox native Android</div>
       <h1>MESIN RAKIT</h1>
       <p class="lead">Rakit dari nol. Bentuk rangka sendiri. Cat bodi. Suara mesin lahir dari susunan part yang kamu pasang.</p>
       <div class="cta">
-        <a class="btn btn-utama" id="btn-unduh" href="https://github.com/xykalnotkel/mesin-rakit-native/releases/latest">Unduh APK</a>
+        <a class="btn btn-utama" href="/api/unduh">Unduh APK</a>
         <a class="btn" href="/drawing">Buka studio Drawing</a>
       </div>
-      <div class="meta" id="ver-meta">Android 6.0 ke atas · layar lanskap · tanpa iklan</div>
+      <div class="meta">Android 6.0 ke atas · layar lanskap · tanpa iklan · ~1,6 MB</div>
     </div>
   </header>
 
@@ -46,62 +47,43 @@
     <div class="grid-3">
       <article class="card"><div class="num">01</div><h3>111 part nyata</h3><p>11 kategori: blok 1 silinder sampai V8, rotary wankel, turbo, CDI, knalpot unik.</p></article>
       <article class="card"><div class="num">02</div><h3>Suara disintesis</h3><p>Nada knalpot dari panjang pipa, pola ledakan dari jumlah silinder, siulan turbo, letupan.</p></article>
-      <article class="card"><div class="num">03</div><h3>Rangka custom</h3><p>Taruh simpul, tarik pipa, pilih bahan. Butuh dudukan stang, mesin, dan as belakang.</p></article>
-      <article class="card"><div class="num">04</div><h3>Body bebas</h3><p>Gambar di grid 14×6 pakai 12 warna cat. Hasilnya jadi bodi kendaraan.</p></article>
+      <article class="card"><div class="num">03</div><h3>Rangka custom</h3><p>Taruh sendi, tarik pipa besi, pilih bahan. Butuh dudukan stang, mesin, dan as belakang.</p></article>
+      <article class="card"><div class="num">04</div><h3>Body bebas</h3><p>Cat bodi motor di studio web atau di bengkel. 12 warna, hasilnya jadi bodi kendaraan.</p></article>
       <article class="card"><div class="num">05</div><h3>Dyno + jalan</h3><p>Kurva torsi-tenaga, 5 lintasan, tabrakan merusak part, servis di bengkel.</p></article>
-      <article class="card"><div class="num">06</div><h3>Kode MRPACK1</h3><p>Desain dari studio web bisa ditempel langsung di menu game. Satu format, dua tempat.</p></article>
+      <article class="card"><div class="num">06</div><h3>Tempel desain</h3><p>Gambar di browser, salin, tempel di menu game. Rangka dan cat body langsung nempel.</p></article>
     </div>
   </section>
 
   <section class="sec wrap" id="unduh">
     <div class="dl-box">
       <div>
-        <div class="kicker">Rilis</div>
-        <h3 id="rel-name">MESIN RAKIT</h3>
-        <p class="sub" id="rel-info" style="margin:0">Mengambil rilis terbaru…</p>
+        <div class="kicker">Rilis resmi</div>
+        <h3>MESIN RAKIT 1.4.1</h3>
+        <p class="sub" style="margin:0">Android 6.0 ke atas · lanskap · ditandatangani rilis</p>
       </div>
-      <div class="cta">
-        <a class="btn btn-utama" id="rel-apk" href="https://github.com/xykalnotkel/mesin-rakit-native/releases/latest">Unduh APK</a>
-        <a class="btn" href="https://github.com/xykalnotkel/mesin-rakit-native">Kode sumber</a>
-      </div>
+      <a class="btn btn-utama" href="/api/unduh">Unduh APK</a>
     </div>
   </section>
 
   <section class="sec wrap">
     <h2>Studio Drawing</h2>
-    <p class="sub">Gambar body, rangka, atau usulan part di browser. Hasilnya berkas MRPACK1 — tempel di game, atau kirim ke studio.</p>
+    <p class="sub">Cat bodi motor, gambar rangka, atau usulkan part. Hasilnya bisa langsung ditempel di HP.</p>
     <div class="grid-2">
       <article class="card">
         <h3>Langsung kepakai di HP</h3>
-        <p>Salin kode dari studio, buka MESIN RAKIT, menu → Tempel. Rangka dan cat body langsung masuk rakitan.</p>
+        <p>Salin desain dari studio, buka MESIN RAKIT, menu → Tempel. Rangka dan cat body masuk rakitan.</p>
       </article>
       <article class="card">
         <h3>Kirim usulan part</h3>
-        <p>Part baru ditinjau lewat email <b>request@xyspace.my.id</b> dalam format yang sama, siap dimasukkan katalog.</p>
+        <p>Part baru ditinjau lewat email request@xyspace.my.id, siap dimasukkan katalog kalau lolos.</p>
       </article>
     </div>
     <p style="margin-top:22px"><a class="btn btn-utama" href="/drawing">Masuk studio</a></p>
   </section>
 
   <footer class="foot wrap">
-    <span>MESIN RAKIT · XyDev · xyspace</span>
-    <span>Format desain: MRPACK1</span>
+    <span>MESIN RAKIT · XyDev</span>
+    <span><a href="/riwayat">Riwayat</a> · <a href="/lisensi">Lisensi</a></span>
   </footer>
-  <script>
-    fetch("https://api.github.com/repos/xykalnotkel/mesin-rakit-native/releases/latest")
-      .then(r => r.json())
-      .then(d => {
-        const apk = (d.assets || []).find(a => /apk$/i.test(a.name));
-        document.getElementById("rel-name").textContent = d.name || "MESIN RAKIT";
-        document.getElementById("rel-info").textContent =
-          (d.tag_name || "") + (apk ? " · " + Math.round(apk.size / 1024) + " KB" : "") + " · Android 6+";
-        if (apk) {
-          document.getElementById("rel-apk").href = apk.browser_download_url;
-          document.getElementById("btn-unduh").href = apk.browser_download_url;
-        }
-        document.getElementById("ver-meta").textContent =
-          (d.tag_name || "rilis") + " · Android 6.0 ke atas · layar lanskap · tanpa iklan";
-      }).catch(() => {});
-  </script>
 </body>
 </html>

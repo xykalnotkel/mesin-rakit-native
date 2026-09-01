@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Riwayat rilis — MESIN RAKIT</title>
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/fonts.css" />
+  <link rel="stylesheet" href="/assets/site.css" />
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="/"><img src="/assets/logo.svg" width="32" height="32" alt="" /> MESIN RAKIT</a>
+    <div class="nav-links">
+      <a href="/">Beranda</a>
+      <a href="/#unduh">Unduh</a>
+      <a href="/drawing">Drawing</a>
+      <a href="/cara">Cara main</a>
+      <a href="/riwayat" class="on">Riwayat</a>
+      <a href="/lisensi">Lisensi</a>
+    </div>
+    <a class="btn btn-utama" href="/api/unduh">Unduh APK</a>
+  </nav>
+
+  <section class="sec wrap">
+    <div class="kicker">Changelog</div>
+    <h2>Riwayat rilis</h2>
+    <p class="sub">Ditulis buat pemain, bukan log teknis. Unduh selalu rilis terbaru.</p>
+
+    <article class="ver">
+      <h3>1.4.1 — game tidak lagi terhenti</h3>
+      <div class="when">2 September 2026 · rilis sekarang</div>
+      <ul>
+        <li><b>Aplikasi tidak menutup diri tiap dibuka.</b> Dulu kalau sempat gagal sekali, buka berikutnya langsung “telah terhenti”.</li>
+        <li><b>Tempel desain dari web.</b> Menu punya Salin desain dan Tempel. Cat body dan rangka dari studio langsung nempel di HP.</li>
+        <li>Peringatan kecil (lanskap, latar) tidak dianggap crash.</li>
+        <li>Tampilan lebih aman di HP yang GPU-nya rewel.</li>
+        <li>Tombol fisik Q, E, R tetap jalan.</li>
+      </ul>
+    </article>
+
+    <article class="ver">
+      <h3>1.4.0 — satu layar, masuk lebih cepat</h3>
+      <div class="when">1 September 2026</div>
+      <ul>
+        <li>Layar pembuka dan layar main digabung. Tidak ada lompat activity yang bikin HP tertentu mati.</li>
+        <li>Kalau gagal buka, jejak langkahnya tercatat supaya mudah dilaporin.</li>
+      </ul>
+    </article>
+
+    <article class="ver">
+      <h3>1.3.1 — lanskap tidak mematikan game</h3>
+      <div class="when">1 September 2026</div>
+      <ul>
+        <li>Putar ke lanskap dipasang pelan-pelan. Kalau HP menolak, dilewati — game tetap buka.</li>
+      </ul>
+    </article>
+
+    <article class="ver">
+      <h3>1.3.0 — alat uji mandiri</h3>
+      <div class="when">1 September 2026</div>
+      <ul>
+        <li>Ikon kedua di laci: <b>UJI MESIN</b>. Menguji layar, font, gambar, model mesin, audio, satu per satu.</li>
+      </ul>
+    </article>
+
+    <article class="ver">
+      <h3>1.2.1 — laporan ke folder Unduhan</h3>
+      <div class="when">1 September 2026</div>
+      <ul>
+        <li>Kalau error, berkas <b>crash-mesin-rakit.txt</b> muncul di Unduhan. Bisa dibuka dan dikirim tanpa izin extra.</li>
+      </ul>
+    </article>
+
+    <article class="ver">
+      <h3>1.2.0 — pintu masuk polos</h3>
+      <div class="when">1 September 2026</div>
+      <ul>
+        <li>Tema dipangkas biar HP rewel tidak mati sebelum game sempat tampil.</li>
+        <li>Pemasangan baru tidak lagi dianggap crash.</li>
+      </ul>
+    </article>
+
+    <article class="ver">
+      <h3>1.1.2 — gambar aman</h3>
+      <div class="when">1 September 2026</div>
+      <ul>
+        <li>Koordinat rusak tidak lagi merusak mesin gambar Android.</li>
+        <li>Kehabisan memori ikut tertangkap, bukan dialog kosong.</li>
+      </ul>
+    </article>
+
+    <article class="ver">
+      <h3>1.1.1 — layar laporan error</h3>
+      <div class="when">31 Agustus 2026</div>
+      <ul>
+        <li>Kalau berhenti, muncul layar laporan plus tombol salin. Ada merek HP, versi Android, versi app.</li>
+      </ul>
+    </article>
+
+    <article class="ver">
+      <h3>1.1.0 — APK rilis bertanda tangan tetap</h3>
+      <div class="when">31 Agustus 2026</div>
+      <ul>
+        <li>Pembaruan bisa ditimpa tanpa hapus app lama. Siap ke toko aplikasi.</li>
+      </ul>
+    </article>
+
+    <article class="ver fix">
+      <h3>1.0.3 — audio tidak menyentuh saat buka</h3>
+      <div class="when">31 Agustus 2026</div>
+      <ul>
+        <li>Suara baru hidup di Dyno atau Jalan. HP yang menolak format audio tetap bisa masuk menu.</li>
+      </ul>
+    </article>
+
+    <article class="ver fix">
+      <h3>1.0.2 — thread audio tidak ngamuk</h3>
+      <div class="when">31 Agustus 2026</div>
+      <ul>
+        <li>Suara tidak lagi memakai prioritas maksimum. Kalau float tidak didukung, turun ke 16 bit.</li>
+        <li>Error tampil di menu, tidak membekukan HP.</li>
+      </ul>
+    </article>
+
+    <article class="ver">
+      <h3>1.0.0 — rilis pertama</h3>
+      <div class="when">31 Agustus 2026</div>
+      <ul>
+        <li>111 part, 16 preset, 5 pengendara, 5 lintasan.</li>
+        <li>Suara disintesis dari rakitan. Rangka custom. Body bebas. Dyno dan jalan.</li>
+      </ul>
+    </article>
+  </section>
+  <footer class="foot wrap">
+    <span>MESIN RAKIT · XyDev</span>
+    <span><a href="/lisensi">Lisensi</a></span>
+  </footer>
+</body>
+</html>

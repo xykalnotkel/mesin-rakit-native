@@ -1,0 +1,101 @@
+MESIN RAKIT — Pemberitahuan hak cipta dan lisensi pihak ketiga
+==============================================================
+
+A. Permainan dan situs MESIN RAKIT
+----------------------------------
+Hak cipta (c) 2026 XyDev / pembuat MESIN RAKIT.
+
+Permainan Android “MESIN RAKIT”, merek, aset asli (gambar part, tema,
+sintesis suara, desain antarmuka), situs mesin.xyspace.my.id, dan format
+desain MRPACK1 adalah milik pembuatnya.
+
+Anda boleh:
+  - mengunduh APK resmi dan memainkannya untuk keperluan pribadi
+  - membuat desain di studio Drawing dan mengirimkannya ke request@xyspace.my.id
+
+Anda tidak boleh, tanpa izin tertulis:
+  - mendistribusikan ulang APK yang diubah
+  - memakai nama, logo, atau merek MESIN RAKIT untuk produk lain
+  - mengklaim permainan ini sebagai milik sendiri
+
+APK resmi hanya dari https://mesin.xyspace.my.id
+
+B. Yang dipakai di permainan (semua tercantum)
+----------------------------------------------
+Permainan ini TIDAK memakai game engine pihak ketiga, WebView, atau
+berkas audio pihak ketiga. Suara disintesis sendiri lewat Android
+AudioTrack. Semua part digambar di kanvas.
+
+1. Kotlin 2.0.21
+   Pemegang: JetBrains s.r.o.
+   Lisensi: Apache License 2.0
+   https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt
+
+2. Android SDK / Android Open Source Project
+   Termasuk: android.app.Activity, SurfaceView, Canvas, AudioTrack,
+   SharedPreferences, MediaStore, Vibrator.
+   Pemegang: Google LLC / AOSP contributors
+   Lisensi: Apache License 2.0
+   https://source.android.com/license
+
+3. Android Gradle Plugin 8.6.1 dan Gradle 8.9
+   Pemegang: Google LLC / Gradle Inc.
+   Lisensi: Apache License 2.0
+   https://github.com/gradle/gradle/blob/master/LICENSE
+
+4. Font Chakra Petch (Regular, Medium, SemiBold, Bold)
+   Dipakai di dalam APK (berkas TTF di app/src/main/assets/fonts/).
+   Desainer: Cadson Demak
+   Lisensi: SIL Open Font License 1.1
+   https://scripts.sil.org/OFL
+   OFL mengizinkan pemakaian, penyematan, dan distribusi font bersama
+   perangkat lunak, asal font tidak dijual sendiri dan nama Reserved
+   Font Name tidak dipakai untuk turunan tanpa izin.
+
+5. Font Barlow Condensed (Regular, SemiBold, Bold)
+   Dipakai di dalam APK untuk angka dan teks rapat.
+   Desainer: Jeremy Tribby
+   Lisensi: SIL Open Font License 1.1
+   https://scripts.sil.org/OFL
+
+Tidak ada pustaka Maven/Gradle lain. dependencies {} di build.gradle kosong.
+
+C. Yang dipakai di situs (mesin.xyspace.my.id)
+----------------------------------------------
+1. Font Chakra Petch 600/700 dan Barlow Condensed 400/600/700
+   Subset latin, berkas WOFF2 disimpan di web/assets/fonts/.
+   Lisensi: SIL Open Font License 1.1 (lihat B.4 dan B.5).
+
+2. Gambar hero.webp dan og.webp
+   Karya asli untuk MESIN RAKIT, hak cipta pembuat.
+
+3. Logo SVG
+   Karya asli untuk MESIN RAKIT, hak cipta pembuat.
+
+4. Hosting: Vercel (bukan bagian distribusi APK).
+5. Email studio: Resend (bukan bagian distribusi APK).
+6. Domain: xyspace.my.id
+
+Situs tidak menampilkan atau membagikan kode sumber permainan.
+
+D. Ringkasan Apache License 2.0
+-------------------------------
+Perangkat lunak di bawah Apache 2.0 diberikan apa adanya, tanpa jaminan.
+Anda boleh memakai, menyalin, mengubah, dan mendistribusikannya, asal
+menyertakan pemberitahuan hak cipta dan salinan lisensi, serta menyatakan
+perubahan yang dibuat. Paten pemberi lisensi diberikan sepanjang Anda
+tidak menuntut paten terhadap kontributor.
+Teks penuh: https://www.apache.org/licenses/LICENSE-2.0
+
+E. Ringkasan SIL Open Font License 1.1
+--------------------------------------
+Font boleh dipakai, dipelajari, diubah, dan didistribusikan ulang secara
+gratis, termasuk disematkan di aplikasi. Font tidak boleh dijual sendiri.
+Turunan harus tetap di bawah OFL. Nama Reserved Font Name tidak boleh
+dipakai pada turunan tanpa izin tertulis.
+Teks penuh: https://scripts.sil.org/OFL
+
+F. Kontak
+---------
+Usulan desain / part: request@xyspace.my.id
+Situs resmi: https://mesin.xyspace.my.id

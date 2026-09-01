@@ -4,36 +4,36 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cara main — MESIN RAKIT</title>
-  <link rel="icon" href="/assets/logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/fonts.css" />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
   <nav class="nav">
-    <a class="brand" href="/"><img src="/assets/logo.png" alt="" /> MESIN RAKIT</a>
+    <a class="brand" href="/"><img src="/assets/logo.svg" width="32" height="32" alt="" /> MESIN RAKIT</a>
     <div class="nav-links">
       <a href="/">Beranda</a>
       <a href="/#unduh">Unduh</a>
       <a href="/drawing">Drawing</a>
       <a href="/cara" class="on">Cara main</a>
+      <a href="/riwayat">Riwayat</a>
+      <a href="/lisensi">Lisensi</a>
     </div>
-    <a class="btn btn-utama" href="/#unduh">Unduh APK</a>
+    <a class="btn btn-utama" href="/api/unduh">Unduh APK</a>
   </nav>
   <section class="sec wrap">
     <div class="kicker">Panduan</div>
     <h2>Cara main</h2>
     <div class="grid-2">
       <article class="card"><h3>Bengkel</h3><p>Pilih part di palet, ketuk grid buat pasang. Ketuk lalu geser buat mindah. Mode Cat menggambar bentuk body, mode Hapus buang part.</p></article>
-      <article class="card"><h3>Rangka</h3><p>Taruh simpul lalu tarik ke simpul lain. Rangka wajib punya dudukan stang, dudukan mesin, dan dudukan as roda belakang.</p></article>
+      <article class="card"><h3>Rangka</h3><p>Taruh sendi lalu tarik ke sendi lain. Rangka wajib punya dudukan stang, dudukan mesin, dan dudukan as roda belakang.</p></article>
       <article class="card"><h3>Dyno</h3><p>Tahan GAS, atur BEBAN, dengar suaranya, lihat grafik torsi dan tenaga.</p></article>
       <article class="card"><h3>Jalan</h3><p>GAS dan REM di layar. Q dan E oper gigi manual, R bangun kalau terbalik. Tabrakan merusak part — servis di bengkel.</p></article>
     </div>
     <h2 style="margin-top:48px">Tempel desain dari web</h2>
-    <p class="sub">Studio Drawing mengeluarkan berkas teks <b>MRPACK1</b>. Di HP:</p>
+    <p class="sub">Studio Drawing menyimpan cat body dan rangka supaya bisa dipakai di HP.</p>
     <ol style="color:var(--dim);padding-left:18px">
-      <li>Salin kode di studio, atau buka berkas <code>.mrpack</code>.</li>
+      <li>Gambar di <a href="/drawing">studio</a>, ketuk Salin desain.</li>
       <li>Buka MESIN RAKIT, di menu ketuk <b>Tempel</b>.</li>
       <li>Rangka dan cat body langsung masuk rakitan.</li>
     </ol>
@@ -41,7 +41,7 @@
   </section>
   <footer class="foot wrap">
     <span>MESIN RAKIT · XyDev</span>
-    <span>request@xyspace.my.id</span>
+    <span><a href="/riwayat">Riwayat</a> · <a href="/lisensi">Lisensi</a></span>
   </footer>
 </body>
 </html>
