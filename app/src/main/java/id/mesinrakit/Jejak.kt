@@ -26,13 +26,19 @@ object Jejak {
         baca(ctx).contains(langkah)
     } catch (e: Exception) { false }
 
+    /** kosong kalau belum pernah ada jejak */
     fun baca(ctx: Context): String = try {
         ctx.openFileInput(NAMA).bufferedReader().readText()
-    } catch (e: Exception) { "(belum ada jejak)" }
+    } catch (e: Exception) { "" }
 
-    /** true kalau startup terakhir tidak sampai tanda ini */
-    fun terputus(ctx: Context, tanda: String): Boolean = try {
-        val isi = baca(ctx)
-        isi.isNotBlank() && !isi.contains(tanda)
-    } catch (e: Exception) { false }
+    /**
+     * true kalau percobaan terakhir berhenti sebelum waktunya.
+     * Berkas yang tidak ada dianggap aman: itu pemasangan baru, bukan crash.
+     */
+    fun terputus(ctx: Context, tanda: String): Boolean {
+        val isi = try { baca(ctx) } catch (e: Exception) { "" }
+        if (isi.isBlank()) return false            // pemasangan baru, bukan crash
+        if (isi.contains("!")) return true         // ada tanda error tercatat
+        return !isi.contains(tanda)
+    }
 }

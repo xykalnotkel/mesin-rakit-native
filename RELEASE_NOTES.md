@@ -30,6 +30,17 @@ Cara main
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
 
+Yang baru di 1.2.0
+- Pintu masuk baru yang temanya benar-benar standar Android. Tujuannya satu:
+  memastikan layar laporan error selalu bisa muncul, sekalipun layar game
+  mati sebelum kode kita sempat jalan.
+- Tema game dikupas sampai tersisa yang perlu saja. Setelan jendela yang
+  tidak standar (status bar tembus pandang, background khusus) dibuang
+  karena itu yang paling mungkin bikin Activity mati di dalam super.onCreate.
+- Manifest dibersihkan: flag isGame, resizeableActivity, dan daftar
+  configChanges yang kepanjangan semuanya dibuang.
+- Logika penanda jejak dibenerin: pemasangan baru tidak lagi dibilang crash.
+
 Yang baru di 1.1.2
 - Semua helper gambar sekarang menolak koordinat NaN dan tak terhingga.
   Skia bisa mati secara native kalau dikasih nilai rusak, dan itu tidak

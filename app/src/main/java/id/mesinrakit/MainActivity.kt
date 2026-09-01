@@ -73,7 +73,7 @@ class MainActivity : android.app.Activity() {
         }
     }
 
-    companion object { const val TANDA_AMAN = "8 frame pertama selesai" }
+    companion object { const val TANDA_AMAN = "7 boot selesai" }
 
     private fun hideBar() {
         if (Build.VERSION.SDK_INT >= 30) {

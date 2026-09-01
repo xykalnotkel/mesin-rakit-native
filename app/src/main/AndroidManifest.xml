@@ -13,22 +13,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:theme="@style/TemaMesinRakit"
-        android:hardwareAccelerated="false"
-        android:isGame="true"
         android:supportsRtl="false">
 
+        <!-- pintu masuk: tema standar, isi seminimal mungkin -->
         <activity
-            android:name="id.mesinrakit.MainActivity"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|screenLayout|uiMode|density|fontScale"
-            android:launchMode="singleTask"
-            android:exported="true"
-            android:resizeableActivity="false">
+            android:name="id.mesinrakit.BukaActivity"
+            android:theme="@style/TemaBiasa"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- layar game -->
+        <activity
+            android:name="id.mesinrakit.MainActivity"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false" />
 
         <!-- layar laporan error, proses terpisah supaya tetap muncul
              walaupun proses utama sudah dimatikan sistem -->

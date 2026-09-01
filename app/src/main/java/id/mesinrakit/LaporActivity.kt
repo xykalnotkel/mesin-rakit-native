@@ -37,7 +37,7 @@ class LaporActivity : Activity() {
         } catch (e: Exception) {
             "(belum ada catatan error tersimpan)"
         }
-        val jejak = Jejak.baca(this)
+        val jejak = Jejak.baca(this).ifBlank { "(kosong: berhenti sangat awal)" }
         val ringkas = "Jejak terakhir:\n$jejak\n" +
                       "Tanda aman: ${MainActivity.TANDA_AMAN}\n" +
                       if (jejak.contains(MainActivity.TANDA_AMAN)) "  SUDAH tercapai\n"
@@ -84,7 +84,7 @@ class LaporActivity : Activity() {
         lay.addView(tombol("COBA MAIN LAGI") {
             // bersihkan jejak supaya masuk ke game, bukan balik ke sini lagi
             Jejak.bersih(this)
-            startActivity(Intent(this, MainActivity::class.java)
+            startActivity(Intent(this, BukaActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
             finish()
         })
