@@ -44,6 +44,7 @@ class App(val ctx: Context, val view: GameView) {
 
     fun layar(nama: String): Scene = scenes.getOrPut(nama) {
         when (nama) {
+            "splash" -> SplashScene(this)
             "menu" -> MenuScene(this)
             "bengkel" -> BengkelScene(this)
             "rangka" -> RangkaScene(this)
@@ -58,7 +59,7 @@ class App(val ctx: Context, val view: GameView) {
     fun boot() {
         /* layar disiapkan paling awal: kalau ada yang gagal setelah ini,
            pemain tetap lihat menu dan pesan error, bukan layar gelap. */
-        scene = layar("menu")
+        scene = layar("splash")
         try {
             muat()
         } catch (e: Exception) {
@@ -66,7 +67,7 @@ class App(val ctx: Context, val view: GameView) {
             try { pasangPreset(build, id.mesinrakit.data.PRESETS[0]) } catch (x: Exception) { }
         }
         try { bangunUlang() } catch (e: Exception) { catat(e) }
-        pindah("menu")
+        pindah("splash")
     }
 
     fun bangunUlang() {

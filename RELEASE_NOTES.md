@@ -25,10 +25,26 @@ Yang ada di rilis ini
 - Font kustom, tanpa emoji, semua digambar langsung di kanvas Android.
 
 Cara main
+- SPLASH: logo game, lalu watermark Made XySpace. Ketuk untuk lewati.
+- MENU: MULAI, BENGKEL, RANGKA, DYNO, PIT, PETA.
 - BENGKEL: pilih part di palet, ketuk grid buat pasang, geser buat mindah.
 - RANGKA: taruh simpul lalu tarik dari simpul ke simpul.
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
+  Cluster nunjukin km/jam, RPM, dan kebagusan mesin.
+
+Yang baru di 1.4.3
+- Splash: logo MESIN RAKIT dulu, lalu watermark Made XySpace, baru masuk menu.
+- Menu utama baru: motor besar di kiri, tombol Mulai / Bengkel / Rangka /
+  Dyno / Pit / Peta di kanan. Preset, cara main, salin dan tempel desain
+  tetap di situ.
+- Cluster HUD waktu jalan: speedometer analog 0–180 km/jam, jarum RPM,
+  dan batang kebagusan mesin.
+- Gaya bodi Indo: Beat / matic, Revo, Supra, Fizr. Mobil memakai siluet
+  global. Rantai, knalpot, mesin, dan pengendara ikut bergerak.
+- Studio Drawing: kanvas lebih luas, penggaris sentimeter, lantai 2.5D,
+  template kanal lurus, U, siku, pipa bengkok, lengkung, dan diamond frame.
+  Gaya Beat, Revo, Supra, Fizr, atau mobil bisa dipilih sebelum ngecat.
 
 Yang baru di 1.4.2
 - Crash waktu tarik part di bengkel sudah ditutup: daftar tombol tidak

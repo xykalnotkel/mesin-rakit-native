@@ -149,6 +149,40 @@ fun Canvas.tri(cx: Float, cy: Float, w: Float, h: Float, rot: Float, p: Paint) {
     drawPath(path, p); restore()
 }
 
+/** cluster speedo + rpm + kondisi mesin */
+fun Canvas.cluster(cx: Float, cy: Float, r: Float, kmh: Double, rpmN: Double, kondisi: Double, rpmTeks: String) {
+    if (!fin(cx, cy, r) || r < 20f) return
+    rr(cx - r * 1.35f, cy - r * 0.95f, r * 2.7f, r * 1.9f, r * 0.18f, T.fill(0xEE0B1220.toInt()))
+    rrs(cx - r * 1.35f, cy - r * 0.95f, r * 2.7f, r * 1.9f, r * 0.18f, T.stroke(C.LINE2, 1.6f))
+    /* speedo kiri */
+    val sx = cx - r * 0.55f
+    drawCircle(sx, cy, r * 0.72f, T.fill(0xFF101820.toInt()))
+    drawCircle(sx, cy, r * 0.72f, T.stroke(C.LINE2, 3f))
+    val vmax = 180.0
+    val frac = clamp(kmh / vmax, 0.0, 1.0)
+    for (i in 0..9) {
+        val a = Math.toRadians(135.0 + i * 27.0)
+        val inner = r * 0.55f
+        val outer = r * 0.68f
+        seg((sx + cos(a) * inner).toFloat(), (cy + sin(a) * inner).toFloat(),
+            (sx + cos(a) * outer).toFloat(), (cy + sin(a) * outer).toFloat(),
+            T.stroke(if (i >= 8) C.RED else C.DIM, 2f))
+    }
+    val na = Math.toRadians(135.0 + frac * 243.0)
+    seg(sx, cy, (sx + cos(na) * r * 0.50).toFloat(), (cy + sin(na) * r * 0.50).toFloat(), T.stroke(C.ACC, 3.2f))
+    txc("${kmh.toInt()}", sx, cy + 4f, T.sp(22f), C.TEXT, F_NUM_BOLD)
+    txc("km/jam", sx, cy + r * 0.38f, T.sp(10f), C.DIM, F_REG)
+    /* rpm kanan */
+    val rx = cx + r * 0.62f
+    arcGauge(rx, cy - 4f, r * 0.42f, rpmN, if (rpmN > 0.92) C.RED else if (rpmN > 0.75) C.AMBER else C.ACC, C.LINE2, 6f)
+    txc(rpmTeks, rx, cy - 6f, T.sp(13f), C.TEXT, F_NUM_SEMI)
+    txc("rpm", rx, cy + 14f, T.sp(10f), C.DIM, F_REG)
+    /* kondisi */
+    tx("MESIN", cx - r * 1.18f, cy + r * 0.78f, T.sp(10f), C.DIM, F_BOLD)
+    bar(cx - r * 0.72f, cy + r * 0.68f, r * 1.85f, 10f, kondisi,
+        if (kondisi > 0.75) C.GREEN else if (kondisi > 0.4) C.AMBER else C.RED)
+}
+
 /** lingkaran progress buat rpm */
 fun Canvas.arcGauge(cx: Float, cy: Float, r: Float, frac: Double, color: Int, back: Int = C.LINE2, w: Float = 8f) {
     if (!fin(cx, cy, r, w) || r <= 0f || frac.isNaN()) return

@@ -4,14 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MESIN RAKIT — sandbox rakit mesin 2D</title>
-  <meta name="description" content="Rakit kendaraan dari nol di Android. Bentuk rangka sendiri, cat bodi, dengar suara mesin yang lahir dari susunan part." />
+  <meta name="description" content="Rakit kendaraan dari nol di Android. Gaya Beat, Revo, Supra, Fizr. Speedo, RPM, kondisi mesin. Studio drawing dengan penggaris dan template kanal." />
   <meta property="og:title" content="MESIN RAKIT" />
   <meta property="og:description" content="Sandbox rakit mesin 2D. Suara disintesis dari rakitan." />
   <meta property="og:image" content="/assets/og.webp" />
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
   <link rel="preload" href="/assets/hero.webp" as="image" type="image/webp" />
   <link rel="stylesheet" href="/assets/fonts.css" />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/site.css?v=143" />
 </head>
 <body>
   <nav class="nav">
@@ -30,9 +30,9 @@
   <header class="hero">
     <img class="bg" src="/assets/hero.webp" width="1440" height="810" alt="" fetchpriority="high" />
     <div class="hero-inner">
-      <div class="kicker">Sandbox native Android</div>
+      <div class="kicker">Made XySpace</div>
       <h1>MESIN RAKIT</h1>
-      <p class="lead">Rakit dari nol. Bentuk rangka sendiri. Cat bodi. Suara mesin lahir dari susunan part yang kamu pasang.</p>
+      <p class="lead">Rakit dari nol. Gaya Beat, Revo, Supra, Fizr. Speedo jelas, RPM, kondisi mesin. Suara lahir dari part yang kamu pasang.</p>
       <div class="cta">
         <a class="btn btn-utama" href="/api/unduh">Unduh APK</a>
         <a class="btn" href="/drawing">Buka studio Drawing</a>
@@ -45,12 +45,12 @@
     <h2>Yang ada di dalam</h2>
     <p class="sub">Ditulis penuh Kotlin native. Tanpa WebView, tanpa game engine pihak ketiga.</p>
     <div class="grid-3">
-      <article class="card"><div class="num">01</div><h3>111 part nyata</h3><p>11 kategori: blok 1 silinder sampai V8, rotary wankel, turbo, CDI, knalpot unik.</p></article>
-      <article class="card"><div class="num">02</div><h3>Suara disintesis</h3><p>Nada knalpot dari panjang pipa, pola ledakan dari jumlah silinder, siulan turbo, letupan.</p></article>
-      <article class="card"><div class="num">03</div><h3>Rangka custom</h3><p>Taruh sendi, tarik pipa besi, pilih bahan. Butuh dudukan stang, mesin, dan as belakang.</p></article>
-      <article class="card"><div class="num">04</div><h3>Body bebas</h3><p>Cat bodi motor di studio web atau di bengkel. 12 warna, hasilnya jadi bodi kendaraan.</p></article>
-      <article class="card"><div class="num">05</div><h3>Dyno + jalan</h3><p>Kurva torsi-tenaga, 5 lintasan, tabrakan merusak part, servis di bengkel.</p></article>
-      <article class="card"><div class="num">06</div><h3>Tempel desain</h3><p>Gambar di browser, salin, tempel di menu game. Rangka dan cat body langsung nempel.</p></article>
+      <article class="card"><div class="num">01</div><h3>Menu &amp; splash</h3><p>Logo game dulu, watermark Made XySpace, lalu menu utama: Mulai, Bengkel, Rangka, Dyno, Pit, Peta.</p></article>
+      <article class="card"><div class="num">02</div><h3>Gaya Indo</h3><p>Bodi mengikuti Beat, Revo, Supra, Fizr, Honda, Yamaha. Mobil memakai gaya global.</p></article>
+      <article class="card"><div class="num">03</div><h3>Mesin hidup</h3><p>Piston, stang, kruk, klep, rantai, knalpot, dan pengendara bergerak mengikuti putaran.</p></article>
+      <article class="card"><div class="num">04</div><h3>Cluster HUD</h3><p>Speedometer analog 0–180, jarum RPM, dan batang kebagusan mesin di jalan.</p></article>
+      <article class="card"><div class="num">05</div><h3>111 part nyata</h3><p>Blok 1 silinder sampai V8, rotary wankel, turbo, CDI, knalpot unik. Suara disintesis dari rakitan.</p></article>
+      <article class="card"><div class="num">06</div><h3>Tempel desain</h3><p>Gambar di studio, salin, tempel di menu. Rangka dan cat body langsung nempel.</p></article>
     </div>
   </section>
 
@@ -58,7 +58,7 @@
     <div class="dl-box">
       <div>
         <div class="kicker">Rilis resmi</div>
-        <h3>MESIN RAKIT 1.4.2</h3>
+        <h3>MESIN RAKIT 1.4.3</h3>
         <p class="sub" style="margin:0">Android 6.0 ke atas · lanskap · ditandatangani rilis</p>
       </div>
       <a class="btn btn-utama" href="/api/unduh">Unduh APK</a>
@@ -67,7 +67,7 @@
 
   <section class="sec wrap">
     <h2>Studio Drawing</h2>
-    <p class="sub">Cat bodi motor, gambar rangka, atau usulkan part. Hasilnya bisa langsung ditempel di HP.</p>
+    <p class="sub">Kanvas luas tampak 2.5D, penggaris sentimeter, template kanal besi utuh / U / siku / bengkok / lengkung / diamond.</p>
     <div class="grid-2">
       <article class="card">
         <h3>Langsung kepakai di HP</h3>
@@ -83,6 +83,7 @@
 
   <footer class="foot wrap">
     <span>MESIN RAKIT · XyDev</span>
+    <span class="made">Made XySpace</span>
     <span><a href="/riwayat">Riwayat</a> · <a href="/lisensi">Lisensi</a></span>
   </footer>
 </body>

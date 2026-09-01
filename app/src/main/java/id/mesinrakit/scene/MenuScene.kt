@@ -1,9 +1,9 @@
 package id.mesinrakit.scene
 
 import android.graphics.Canvas
+import android.graphics.Path
 import id.mesinrakit.App
 import id.mesinrakit.core.*
-import id.mesinrakit.model.Spec
 import kotlin.math.*
 import id.mesinrakit.ui.*
 
@@ -18,61 +18,65 @@ class MenuScene(app: App) : Scene(app) {
     private var idBantuan = -1
     private var idSalin = -1
     private var idTempel = -1
-    private var presetKe = 0
     private var bukaPreset = false
     private var bukaBantuan = false
     private var idLog = -1
 
     override fun draw(c: Canvas, w: Float, h: Float) {
         val s = app.spec
-        /* judul */
-        c.txc("MESIN RAKIT", w / 2f, h * 0.13f, T.sp(46f), C.TEXT, F_BOLD)
-        c.txc("Sandbox rakit mesin 2D - suara lahir dari rakitanmu sendiri", w / 2f, h * 0.13f + 34f, T.sp(13f), C.DIM, F_REG)
-
-        val kolKiri = w * 0.05f
-        val lw = w * 0.34f
-        ringkasan(c, app, kolKiri, h * 0.24f, lw, h * 0.62f)
-
-        /* radar karakter */
-        val rx = kolKiri + lw + w * 0.06f
-        c.panelJudul("Karakter Mesin", rx, h * 0.24f, w * 0.26f, h * 0.62f)
-        radarKarakter(c, s, rx + w * 0.13f, h * 0.50f, min(w * 0.10f, h * 0.20f))
-        var ty = h * 0.24f + h * 0.62f - 54f
-        val tag = s.karakter.tags
-        var tx = rx + 14f
-        for (t in tag) {
-            val tw = T.p(C.TEXT, T.sp(11f), F_SEMI).measureText(t) + 18f
-            if (tx + tw > rx + w * 0.26f - 12f) { tx = rx + 14f; ty += 24f }
-            c.rr(tx, ty, tw, 20f, 10f, T.fill(C.PANEL2))
-            c.txc(t, tx + tw / 2f, ty + 10f, T.sp(11f), C.ACC, F_SEMI)
-            tx += tw + 6f
+        /* lantai bengkel 2.5D */
+        c.drawPaint(grad(0f, 0f, w, h, 0xFF071018.toInt(), 0xFF0B1220.toInt()))
+        val horizon = h * 0.58f
+        val lantai = Path()
+        lantai.moveTo(0f, horizon); lantai.lineTo(w, horizon); lantai.lineTo(w, h); lantai.lineTo(0f, h); lantai.close()
+        c.drawPath(lantai, T.fill(0xFF0A1522.toInt()))
+        val grid = T.stroke(0x1422D3EE, 1.2f)
+        var i = 0
+        while (i <= 10) {
+            val t = i / 10f
+            val y = horizon + (h - horizon) * t * t
+            c.drawLine(0f, y, w, y, grid)
+            i++
+        }
+        for (k in -8..8) {
+            val x0 = w / 2f + k * w * 0.08f
+            c.drawLine(x0, horizon, w / 2f + k * w * 0.22f, h, grid)
         }
 
-        /* tombol aksi */
-        val bx = w * 0.70f
-        val bw = w * 0.25f
-        var by = h * 0.22f
-        val bh = max(48f, h * 0.078f)
-        val gap = h * 0.010f
-        idBengkel = tombol(c, "BENGKEL  (rakit part)", bx, by, bw, bh, BTN_UTAMA, T.sp(15f)); by += bh + gap
-        idRangka = tombol(c, "RANGKA  (bentuk sendiri)", bx, by, bw, bh, BTN_NORMAL, T.sp(15f)); by += bh + gap
-        idDyno = tombol(c, "DYNO  (dengar suaranya)", bx, by, bw, bh, BTN_NORMAL, T.sp(15f)); by += bh + gap
-        idPit = tombol(c, "PIT  (ganti pengendara)", bx, by, bw, bh, BTN_NORMAL, T.sp(15f)); by += bh + gap
-        idPeta = tombol(c, "MAP  (pilih lintasan)", bx, by, bw, bh, BTN_NORMAL, T.sp(15f)); by += bh + gap
-        idJalan = tombol(c, "JALAN", bx, by, bw, bh, BTN_UTAMA, T.sp(16f), s.valid); by += bh + gap * 2
-        idBantuan = tombol(c, "Cara main", bx, by, bw * 0.48f, bh * 0.8f, BTN_HANTU, T.sp(13f))
-        idPreset = tombol(c, "Preset", bx + bw * 0.52f, by, bw * 0.48f, bh * 0.8f, BTN_HANTU, T.sp(13f))
-        by += bh * 0.8f + gap
-        idSalin = tombol(c, "Salin kode", bx, by, bw * 0.48f, bh * 0.72f, BTN_HANTU, T.sp(12f))
-        idTempel = tombol(c, "Tempel", bx + bw * 0.52f, by, bw * 0.48f, bh * 0.72f, BTN_HANTU, T.sp(12f))
+        /* motor besar di kiri */
+        gambarKendaraan(c, app, w * 0.34f, h * 0.46f, w * 0.52f, h * 0.42f)
+        c.tx(gayaLabel(s, app.build.name), w * 0.08f, h * 0.22f, T.sp(13f), C.ACC, F_SEMI)
+        c.tx(s.karakter.archetype, w * 0.08f, h * 0.22f + 26f, T.sp(22f), C.TEXT, F_BOLD)
 
-        /* uang */
-        c.rr(w * 0.70f, h * 0.10f, w * 0.25f, 34f, 17f, T.fill(C.PANEL))
-        c.txc("Uang  ${rupiah(app.build.money)}", w * 0.825f, h * 0.10f + 17f, T.sp(14f), C.AMBER, F_SEMI)
+        /* judul */
+        gambarLogo(c, 28f + 22f, 28f + 22f, 22f)
+        c.tx("MESIN RAKIT", 64f, 42f, T.sp(22f), C.TEXT, F_BOLD)
+        c.tx("sandbox rakit mesin", 64f, 64f, T.sp(12f), C.DIM, F_REG)
+
+        c.rr(w * 0.08f, h * 0.86f, w * 0.28f, 36f, 18f, T.fill(C.PANEL))
+        c.txc("Uang  ${rupiah(app.build.money)}", w * 0.22f, h * 0.86f + 18f, T.sp(14f), C.AMBER, F_SEMI)
+
+        /* tombol kanan */
+        val bx = w * 0.62f
+        val bw = w * 0.32f
+        var by = h * 0.14f
+        val bh = max(52f, h * 0.085f)
+        val gap = h * 0.012f
+        idJalan = tombol(c, "MULAI BERMAIN", bx, by, bw, bh, BTN_UTAMA, T.sp(18f), s.valid); by += bh + gap
+        idBengkel = tombol(c, "BENGKEL", bx, by, bw, bh, BTN_NORMAL, T.sp(16f)); by += bh + gap
+        idRangka = tombol(c, "RANGKA", bx, by, bw * 0.48f, bh, BTN_NORMAL, T.sp(15f))
+        idDyno = tombol(c, "DYNO", bx + bw * 0.52f, by, bw * 0.48f, bh, BTN_NORMAL, T.sp(15f)); by += bh + gap
+        idPit = tombol(c, "PIT", bx, by, bw * 0.48f, bh, BTN_NORMAL, T.sp(15f))
+        idPeta = tombol(c, "PETA", bx + bw * 0.52f, by, bw * 0.48f, bh, BTN_NORMAL, T.sp(15f)); by += bh + gap
+        idPreset = tombol(c, "Preset Indo", bx, by, bw * 0.48f, bh * 0.85f, BTN_HANTU, T.sp(14f))
+        idBantuan = tombol(c, "Cara main", bx + bw * 0.52f, by, bw * 0.48f, bh * 0.85f, BTN_HANTU, T.sp(14f)); by += bh * 0.85f + gap
+        idSalin = tombol(c, "Salin desain", bx, by, bw * 0.48f, bh * 0.78f, BTN_HANTU, T.sp(13f))
+        idTempel = tombol(c, "Tempel", bx + bw * 0.52f, by, bw * 0.48f, bh * 0.78f, BTN_HANTU, T.sp(13f))
 
         if (!s.valid) {
-            c.txc("Belum bisa jalan: ${s.missing.take(3).joinToString(", ")}", w * 0.825f, h * 0.90f, T.sp(12.5f), C.RED, F_MED)
+            c.txc("Lengkapi dulu: ${s.missing.take(2).joinToString(", ")}", bx + bw / 2f, h * 0.92f, T.sp(12f), C.RED, F_MED)
         }
+        c.txc("Made XySpace", w * 0.78f, h * 0.965f, T.sp(11f), C.DIM2, F_SEMI)
 
         if (bukaPreset) panelPreset(c, w, h)
         if (bukaBantuan) panelBantuan(c, w, h)
@@ -80,50 +84,39 @@ class MenuScene(app: App) : Scene(app) {
     }
 
     private fun panelPreset(c: Canvas, w: Float, h: Float) {
-        val pw = w * 0.46f
-        val ph = h * 0.70f
+        val pw = w * 0.50f
+        val ph = h * 0.74f
         val x = (w - pw) / 2f
         val y = (h - ph) / 2f
         c.rr(0f, 0f, w, h, 0f, T.fill(0xCC050A12.toInt()))
-        c.panelJudul("Preset Rakitan", x, y, pw, ph)
+        c.panelJudul("Preset rakitan", x, y, pw, ph)
         val list = id.mesinrakit.data.PRESETS
-        val rowH = (ph - 70f) / list.size
+        val rowH = (ph - 78f) / list.size
         for (i in list.indices) {
-            val ry = y + 44f + i * rowH
+            val ry = y + 48f + i * rowH
             val ps = list[i]
             val dipilih = app.build.name == ps.name
-            tombol(c, ps.name, x + 12f, ry, pw - 90f, rowH - 6f, BTN_HANTU, T.sp(13f), true, i, dipilih)
-            c.tx(ps.tags.firstOrNull() ?: "", x + pw - 74f, ry + rowH / 2f, T.sp(11f), C.DIM, F_REG)
-            add(x + pw - 150f, ry, 60f, rowH - 6f, 1000 + i)
+            tombol(c, ps.name, x + 14f, ry, pw - 28f, rowH - 8f, BTN_HANTU, T.sp(14f), true, i, dipilih)
+            add(x + 14f, ry, pw - 28f, rowH - 8f, 1000 + i)
         }
-        tombol(c, "Tutup", x + pw - 90f, y + ph - 46f, 78f, 34f, BTN_NORMAL, T.sp(13f), true, 999)
+        tombol(c, "Tutup", x + pw - 110f, y + ph - 52f, 96f, 40f, BTN_NORMAL, T.sp(14f), true, 999)
     }
 
     private fun panelBantuan(c: Canvas, w: Float, h: Float) {
-        val pw = w * 0.60f
-        val ph = h * 0.76f
+        val pw = w * 0.62f
+        val ph = h * 0.78f
         val x = (w - pw) / 2f
         val y = (h - ph) / 2f
         c.rr(0f, 0f, w, h, 0f, T.fill(0xCC050A12.toInt()))
         c.panelJudul("Cara main", x, y, pw, ph)
-        val teks = "BENGKEL: pilih part di palet, ketuk grid buat pasang. Ketuk lalu geser buat mindah. " +
-            "Mode Cat buat menggambar bentuk body, mode Hapus buat buang part.\n\n" +
-            "RANGKA: taruh simpul lalu tarik dari simpul ke simpul buat bikin pipa. " +
-            "Pilih simpul buat mengatur lengkungan, diameter, ketebalan, dan bahan. " +
-            "Rangka harus punya dudukan stang, dudukan mesin, dan dudukan as roda belakang.\n\n" +
-            "DYNO: tahan GAS, atur BEBAN, dengarkan suaranya dan lihat grafik torsi serta tenaga.\n\n" +
-            "PIT: ganti pengendara. Berat dan gaya berkendara ikut memengaruhi akselerasi.\n\n" +
-            "MAP: pilih lintasan. Lintasan Lurus datar tanpa rintangan, khusus buat setting.\n\n" +
-            "JALAN: tombol GAS dan REM di layar, atau panah atas dan bawah di keyboard. " +
-            "Q dan E buat oper gigi manual, R buat bangun kalau terbalik. " +
-            "Tabrakan merusak part: tenaga turun dan mesin bisa bocor. Servis di Bengkel.\n\n" +
-            "KODE DESAIN: Salin kode menyalin MRPACK1 ke clipboard. Tempel kode dari studio web " +
-            "supaya rangka dan body langsung kepasang. Studio: mesin.xyspace.my.id/drawing"
-        c.wrap(teks, x + 20f, y + 44f, pw - 40f, T.sp(13.5f), C.TEXT)
-        tombol(c, "Tutup", x + pw - 100f, y + ph - 46f, 80f, 34f, BTN_NORMAL, T.sp(13f), true, 998)
+        val teks = "Splash lalu menu utama. MULAI membawa rakitan ke jalan. " +
+            "BENGKEL pasang part. RANGKA bentuk pipa. DYNO dengar suara. " +
+            "GAS/REM di layar, Q/E gigi, R bangun. Tabrakan merusak part — servis di bengkel. " +
+            "Studio Drawing: mesin.xyspace.my.id/drawing — salin, lalu Tempel di menu."
+        c.wrap(teks, x + 22f, y + 52f, pw - 44f, T.sp(15f), C.TEXT)
+        tombol(c, "Tutup", x + pw - 120f, y + ph - 54f, 100f, 42f, BTN_NORMAL, T.sp(14f), true, 998)
     }
 
-    /** kalau aplikasi sempat error, tunjukkan supaya bisa dilaporin */
     private fun panelError(c: Canvas, w: Float, h: Float) {
         val log = app.errorTeks ?: app.muatLog() ?: return
         val baris = log.split("\n").filter { it.isNotBlank() }.take(5)
@@ -170,4 +163,14 @@ class MenuScene(app: App) : Scene(app) {
         if (bukaBantuan) { bukaBantuan = false; return true }
         return false
     }
+}
+
+fun gayaLabel(s: id.mesinrakit.model.Spec, name: String): String = when (gayaKendaraan(s, name)) {
+    "beat" -> "Gaya Beat / matic skuter"
+    "revo" -> "Gaya Revo / underbone"
+    "supra" -> "Gaya Supra"
+    "fizr" -> "Gaya Fizr / sport underbone"
+    "cruiser" -> "Gaya cruiser"
+    "mobil" -> "Mobil global"
+    else -> "Rakitan bebas"
 }

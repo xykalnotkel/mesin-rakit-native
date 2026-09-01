@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Drawing — MESIN RAKIT Studio</title>
-  <meta name="description" content="Cat bodi motor, gambar rangka, atau usulkan part. Tempel langsung di game." />
+  <meta name="description" content="Studio 2D tampak 3D. Penggaris, template kanal besi, gaya Beat Revo Supra Fizr." />
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/assets/fonts.css" />
   <link rel="stylesheet" href="/assets/site.css" />
@@ -38,19 +38,36 @@
       <input id="author" type="text" maxlength="48" placeholder="nama kamu" />
 
       <div id="alat-body">
+        <label>Gaya kendaraan</label>
+        <select id="gaya">
+          <option value="beat">Honda Beat / matic</option>
+          <option value="revo">Honda Revo</option>
+          <option value="supra">Honda Supra</option>
+          <option value="fizr">Yamaha Fizr</option>
+          <option value="mobil">Mobil global</option>
+        </select>
         <label>Alat</label>
         <div class="tools">
           <button class="btn" id="t-brush">Kuas</button>
           <button class="btn" id="t-erase">Hapus</button>
         </div>
         <label>Ukuran kuas</label>
-        <input id="ukuran" type="range" min="6" max="48" value="18" />
+        <input id="ukuran" type="range" min="6" max="56" value="20" />
         <label>Cat (12 warna game)</label>
         <div class="swatches" id="swatches"></div>
-        <p class="hint">Cat di bodi motor, bukan di kotak. Ban, mesin, dan knalpot sudah ada.</p>
+        <p class="hint">Cat di bodi. Penggaris di tepi kanvas. Ban dan mesin sudah ada.</p>
       </div>
 
       <div id="alat-frame" hidden>
+        <label>Template kanal / pipa</label>
+        <div class="tpl" id="tpl-frame">
+          <button data-tpl="kanal">Kanal lurus</button>
+          <button data-tpl="kanalU">Kanal U</button>
+          <button data-tpl="siku">Siku L</button>
+          <button data-tpl="bengkok">Pipa bengkok</button>
+          <button data-tpl="lengkung">Pipa lengkung</button>
+          <button data-tpl="diamond">Diamond frame</button>
+        </div>
         <label>Jenis sendi</label>
         <select id="nk">
           <option value="free">Bebas</option>
@@ -66,7 +83,7 @@
           <option value="chrome">Chrome</option>
           <option value="titanium">Titanium</option>
         </select>
-        <p class="hint">Klik di rangka motor = sendi. Klik sendi lalu sendi lain = pipa. Wajib stang, mesin, as belakang.</p>
+        <p class="hint">Template menaruh kanal jadi. Klik sendi ke sendi = pipa. Wajib stang, mesin, as belakang.</p>
         <button class="btn" id="hapus-node">Hapus sendi terpilih</button>
       </div>
 
@@ -80,19 +97,22 @@
           <option value="roda">Roda</option>
           <option value="lain">Lainnya</option>
         </select>
-        <p class="hint">Gambar part di meja kerja. Usulan dikirim ke studio, belum otomatis masuk katalog.</p>
+        <p class="hint">Gambar part di meja kerja. Usulan ke request@xyspace.my.id.</p>
         <button class="btn" id="clear-part">Kosongkan kanvas</button>
       </div>
     </aside>
 
     <main class="stage">
-      <canvas id="board" class="board" width="980" height="510"></canvas>
-      <div class="stat" id="stat">Kuas di bodi motor</div>
+      <div class="stage-top">
+        <span class="kicker">Kanvas luas · penggaris cm</span>
+      </div>
+      <canvas id="board" class="board" width="1280" height="720"></canvas>
+      <div class="stat" id="stat"><span>Kuas di bodi</span><span>Made XySpace</span></div>
     </main>
 
     <aside class="rail">
       <div class="kicker">Kirim ke game</div>
-      <p class="hint">Salin desain, buka MESIN RAKIT di HP, ketuk <b>Tempel</b> di menu.</p>
+      <p class="hint">Salin desain, buka MESIN RAKIT, ketuk <b>Tempel</b> di menu utama.</p>
       <div class="tools">
         <button class="btn btn-utama" id="salin">Salin desain</button>
         <button class="btn" id="unduh-berkas">Unduh berkas</button>
@@ -106,6 +126,6 @@
     </aside>
   </div>
   <div class="toast" id="toast"></div>
-  <script src="/assets/studio.js"></script>
+  <script src="/assets/studio.js?v=143"></script>
 </body>
 </html>

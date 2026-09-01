@@ -225,22 +225,11 @@ class JalanScene(app: App) : Scene(app), KeyHandler {
             }
         }
 
-        /* HUD */
-        val kecepatan = abs(v.kmh).toInt()
-        c.txc("$kecepatan", w * 0.50f, h * 0.16f, T.sp(44f), C.TEXT, F_NUM_BOLD)
-        c.txc("km/jam", w * 0.50f, h * 0.16f + 30f, T.sp(12f), C.DIM, F_SEMI)
-
-        /* rpm */
-        val rx = w * 0.50f
-        val ry = h * 0.80f
-        val rr = h * 0.11f
-        c.arcGauge(rx, ry, rr, (v.rpm / s.redline).coerceAtMost(1.0),
-            if (v.rpm > s.redline * 0.92) C.RED else if (v.rpm > s.peakRPM) C.AMBER else C.ACC, C.LINE2, 7f)
-        c.txc("${v.rpm.toInt()}", rx, ry - 4f, T.sp(20f), C.TEXT, F_NUM_SEMI)
-        c.txc("rpm", rx, ry + 18f, T.sp(10f), C.DIM, F_REG)
+        /* HUD cluster */
         val gigi = if (s.cvt) "CVT" else if (v.manual) "M${v.gear + 1}" else "A${v.gear + 1}"
-        c.txc(gigi, rx, ry + rr + 16f, T.sp(16f), if (v.cut) C.RED else C.ACC, F_NUM_BOLD)
-        if (v.boost > 0.05) c.txc("${String.format("%.1f", v.boost)} bar", rx, ry - rr - 14f, T.sp(12f), C.AMBER, F_BOLD)
+        c.cluster(w * 0.50f, h * 0.78f, h * 0.11f, abs(v.kmh), (v.rpm / s.redline).coerceAtMost(1.2), s.kondisi, "${v.rpm.toInt()}")
+        c.txc(gigi, w * 0.50f, h * 0.78f + h * 0.11f * 0.95f, T.sp(16f), if (v.cut) C.RED else C.ACC, F_NUM_BOLD)
+        if (v.boost > 0.05) c.txc("${String.format("%.1f", v.boost)} bar", w * 0.50f, h * 0.62f, T.sp(13f), C.AMBER, F_BOLD)
 
         /* informasi atas */
         c.rr(w * 0.02f, h * 0.06f, w * 0.20f, 74f, 12f, T.fill(0x990B1220.toInt()))

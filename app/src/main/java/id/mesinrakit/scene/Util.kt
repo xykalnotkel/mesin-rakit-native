@@ -159,11 +159,16 @@ fun gambarRakitSamping(
             px(-wb * 0.08, r * 0.55), py(-wb * 0.08, r * 0.55), T.stroke(frameCol, sw(0.022)))
     }
 
-    if (s.isCar) {
-        kotak(-wb * 0.52, r * 0.35, wb * 0.52, r * 1.15, T.fill(body))
-        kotak(-wb * 0.18, r * 1.10, wb * 0.28, r * 1.85, T.fill(body))
-        kotak(-wb * 0.12, r * 1.35, wb * 0.22, r * 1.72, T.fill(0xFF1A2433.toInt()))
-        gambarMesinHidup(c, px, py, ppm, s, crank, 0.22, r * 0.70)
+    val gaya = gayaKendaraan(s, b.name)
+    val shake = sin(app.t * rpm * 0.015) * (0.004 + 0.01 * (rpm / max(1000.0, s.redline)))
+    val ex = 0.02 + shake
+    val ey = r * 0.72 + shake * 0.4
+
+    if (gaya == "mobil" || s.isCar) {
+        kotak(-wb * 0.55, r * 0.30, wb * 0.55, r * 1.05, T.fill(body))
+        kotak(-wb * 0.22, r * 1.00, wb * 0.32, r * 1.85, T.fill(body))
+        kotak(-wb * 0.16, r * 1.28, wb * 0.26, r * 1.70, T.fill(0xFF1A2433.toInt()))
+        gambarMesinHidup(c, px, py, ppm, s, crank, 0.28, r * 0.65)
         return
     }
 
@@ -174,34 +179,25 @@ fun gambarRakitSamping(
     c.drawLine(px(wb * 0.38, r * 1.80), py(wb * 0.38, r * 1.80),
         px(wb * 0.50, 0.0), py(wb * 0.50, 0.0), T.stroke(0xFFA8B4C4.toInt(), sw(0.018)))
 
-    gambarMesinHidup(c, px, py, ppm, s, crank, 0.02, r * 0.72)
+    gambarMesinHidup(c, px, py, ppm, s, crank, ex, ey)
 
+    val knalJ = sin(app.t * rpm * 0.02) * 0.012
     val knal = T.stroke(0xFFC5D0DE.toInt(), sw(0.022))
     c.drawLine(px(-0.06, r * 0.42), py(-0.06, r * 0.42),
-        px(-wb * 0.42, r * 0.38), py(-wb * 0.42, r * 0.38), knal)
-    kotak(-wb * 0.58, r * 0.28, -wb * 0.40, r * 0.52,
+        px(-wb * 0.42, r * 0.38 + knalJ), py(-wb * 0.42, r * 0.38 + knalJ), knal)
+    kotak(-wb * 0.58, r * 0.26 + knalJ, -wb * 0.40, r * 0.52 + knalJ,
         metal(px(-wb * 0.58, r * 0.28), py(-wb * 0.58, r * 0.52),
             px(-wb * 0.40, r * 0.28), py(-wb * 0.40, r * 0.28)))
 
-    c.drawLine(px(0.06, r * 0.48), py(0.06, r * 0.48), rearSx, rearSy - rPx * 0.35f, T.stroke(0xFF8A97A8.toInt(), sw(0.010)))
-    c.drawLine(px(0.06, r * 0.32), py(0.06, r * 0.32), rearSx, rearSy + rPx * 0.20f, T.stroke(0xFF8A97A8.toInt(), sw(0.010)))
+    /* rantai bergerak */
+    val chainOff = (spinR % TAU)
+    val ch = T.stroke(0xFF8A97A8.toInt(), sw(0.010))
+    c.drawLine(px(0.06, r * 0.48), py(0.06, r * 0.48),
+        rearSx + (cos(chainOff) * 2).toFloat(), rearSy - rPx * 0.35f, ch)
+    c.drawLine(px(0.06, r * 0.32), py(0.06, r * 0.32),
+        rearSx - (cos(chainOff) * 2).toFloat(), rearSy + rPx * 0.20f, ch)
 
-    val tank = Path()
-    tank.moveTo(px(-0.04, r * 1.48), py(-0.04, r * 1.48))
-    tank.quadTo(px(0.16, r * 1.92), py(0.16, r * 1.92), px(0.32, r * 1.62), py(0.32, r * 1.62))
-    tank.lineTo(px(0.28, r * 1.28), py(0.28, r * 1.28))
-    tank.quadTo(px(0.10, r * 1.18), py(0.10, r * 1.18), px(-0.02, r * 1.32), py(-0.02, r * 1.32))
-    tank.close()
-    c.drawPath(tank, T.fill(body))
-    c.drawPath(tank, T.stroke(0x33000000, 1.4f))
-
-    val jok = Path()
-    jok.moveTo(px(-wb * 0.32, r * 1.52), py(-wb * 0.32, r * 1.52))
-    jok.quadTo(px(-wb * 0.18, r * 1.72), py(-wb * 0.18, r * 1.72), px(-0.02, r * 1.58), py(-0.02, r * 1.58))
-    jok.lineTo(px(-0.02, r * 1.40), py(-0.02, r * 1.40))
-    jok.lineTo(px(-wb * 0.30, r * 1.38), py(-wb * 0.30, r * 1.38))
-    jok.close()
-    c.drawPath(jok, T.fill(0xFF101720.toInt()))
+    gambarBodiGaya(c, px, py, gaya, wb, r, body)
 
     c.drawLine(px(wb * 0.30, r * 1.82), py(wb * 0.30, r * 1.82),
         px(wb * 0.42, r * 2.05), py(wb * 0.42, r * 2.05), T.stroke(0xFF9AA7B8.toInt(), sw(0.016)))
@@ -218,8 +214,9 @@ fun gambarRakitSamping(
     }
 
     if (rider) {
-        val hx = px(-wb * 0.04, r * 2.15)
-        val hy = py(-wb * 0.04, r * 2.15)
+        val bob = sin(app.t * 11.0) * 0.012 * (0.4 + rpm / max(2000.0, s.redline))
+        val hx = px(-wb * 0.04, r * 2.15 + bob)
+        val hy = py(-wb * 0.04, r * 2.15 + bob)
         val hcol = s.driver.color
         c.dot(hx, hy, rPx * 0.28f, T.fill(hcol))
         c.drawLine(hx, hy + rPx * 0.22f, px(-wb * 0.08, r * 1.55), py(-wb * 0.08, r * 1.55), T.stroke(hcol, sw(0.028)))
@@ -227,6 +224,82 @@ fun gambarRakitSamping(
         c.drawLine(px(-wb * 0.08, r * 1.55), py(-wb * 0.08, r * 1.55),
             px(0.10, r * 0.55), py(0.10, r * 0.55), T.stroke(0xFF2A3444.toInt(), sw(0.016)))
     }
+}
+
+fun gayaKendaraan(s: Spec, name: String = ""): String {
+    val n = name.lowercase()
+    if (s.isCar || s.nWheels >= 4) return "mobil"
+    if (n.contains("beat") || n.contains("vario") || n.contains("mio") || n.contains("scoopy") || n.contains("lexi")) return "beat"
+    if (n.contains("fiz") || n.contains("f1z") || n.contains("jupiter") || n.contains("mx")) return "fizr"
+    if (n.contains("supra") || n.contains("grand") || n.contains("legenda")) return "supra"
+    if (n.contains("revo") || n.contains("blade") || n.contains("vega") || n.contains("smash")) return "revo"
+    if (s.cvt) return "beat"
+    if (s.layout.startsWith("V")) return "cruiser"
+    if (s.dispCc >= 140 && !s.cvt) return "fizr"
+    if (s.dispCc >= 110) return "supra"
+    return "revo"
+}
+
+private fun gambarBodiGaya(
+    c: Canvas,
+    px: (Double, Double) -> Float, py: (Double, Double) -> Float,
+    gaya: String, wb: Double, r: Double, body: Int
+) {
+    val tank = Path()
+    val jok = Path()
+    when (gaya) {
+        "beat" -> {
+            tank.moveTo(px(-wb * 0.18, r * 1.15), py(-wb * 0.18, r * 1.15))
+            tank.quadTo(px(0.10, r * 1.85), py(0.10, r * 1.85), px(wb * 0.38, r * 1.70), py(wb * 0.38, r * 1.70))
+            tank.lineTo(px(wb * 0.40, r * 0.90), py(wb * 0.40, r * 0.90))
+            tank.quadTo(px(0.08, r * 0.55), py(0.08, r * 0.55), px(-wb * 0.22, r * 0.85), py(-wb * 0.22, r * 0.85))
+            tank.close()
+            jok.moveTo(px(-wb * 0.28, r * 1.55), py(-wb * 0.28, r * 1.55))
+            jok.quadTo(px(-0.02, r * 1.72), py(-0.02, r * 1.72), px(0.10, r * 1.48), py(0.10, r * 1.48))
+            jok.lineTo(px(0.08, r * 1.28), py(0.08, r * 1.28))
+            jok.lineTo(px(-wb * 0.26, r * 1.32), py(-wb * 0.26, r * 1.32))
+            jok.close()
+        }
+        "fizr" -> {
+            tank.moveTo(px(-0.02, r * 1.42), py(-0.02, r * 1.42))
+            tank.quadTo(px(0.22, r * 2.05), py(0.22, r * 2.05), px(0.40, r * 1.55), py(0.40, r * 1.55))
+            tank.lineTo(px(0.34, r * 1.18), py(0.34, r * 1.18))
+            tank.quadTo(px(0.12, r * 1.10), py(0.12, r * 1.10), px(-0.02, r * 1.22), py(-0.02, r * 1.22))
+            tank.close()
+            jok.moveTo(px(-wb * 0.28, r * 1.48), py(-wb * 0.28, r * 1.48))
+            jok.quadTo(px(-wb * 0.10, r * 1.78), py(-wb * 0.10, r * 1.78), px(0.02, r * 1.50), py(0.02, r * 1.50))
+            jok.lineTo(px(0.00, r * 1.30), py(0.00, r * 1.30))
+            jok.lineTo(px(-wb * 0.26, r * 1.32), py(-wb * 0.26, r * 1.32))
+            jok.close()
+        }
+        "supra" -> {
+            tank.moveTo(px(-0.06, r * 1.45), py(-0.06, r * 1.45))
+            tank.quadTo(px(0.14, r * 1.95), py(0.14, r * 1.95), px(0.34, r * 1.58), py(0.34, r * 1.58))
+            tank.lineTo(px(0.30, r * 1.22), py(0.30, r * 1.22))
+            tank.quadTo(px(0.10, r * 1.14), py(0.10, r * 1.14), px(-0.04, r * 1.28), py(-0.04, r * 1.28))
+            tank.close()
+            jok.moveTo(px(-wb * 0.30, r * 1.50), py(-wb * 0.30, r * 1.50))
+            jok.quadTo(px(-wb * 0.14, r * 1.70), py(-wb * 0.14, r * 1.70), px(-0.02, r * 1.55), py(-0.02, r * 1.55))
+            jok.lineTo(px(-0.02, r * 1.36), py(-0.02, r * 1.36))
+            jok.lineTo(px(-wb * 0.28, r * 1.36), py(-wb * 0.28, r * 1.36))
+            jok.close()
+        }
+        else -> {
+            tank.moveTo(px(-0.04, r * 1.48), py(-0.04, r * 1.48))
+            tank.quadTo(px(0.16, r * 1.92), py(0.16, r * 1.92), px(0.32, r * 1.62), py(0.32, r * 1.62))
+            tank.lineTo(px(0.28, r * 1.28), py(0.28, r * 1.28))
+            tank.quadTo(px(0.10, r * 1.18), py(0.10, r * 1.18), px(-0.02, r * 1.32), py(-0.02, r * 1.32))
+            tank.close()
+            jok.moveTo(px(-wb * 0.32, r * 1.52), py(-wb * 0.32, r * 1.52))
+            jok.quadTo(px(-wb * 0.18, r * 1.72), py(-wb * 0.18, r * 1.72), px(-0.02, r * 1.58), py(-0.02, r * 1.58))
+            jok.lineTo(px(-0.02, r * 1.40), py(-0.02, r * 1.40))
+            jok.lineTo(px(-wb * 0.30, r * 1.38), py(-wb * 0.30, r * 1.38))
+            jok.close()
+        }
+    }
+    c.drawPath(tank, T.fill(body))
+    c.drawPath(tank, T.stroke(0x33000000, 1.4f))
+    c.drawPath(jok, T.fill(0xFF101720.toInt()))
 }
 
 /** blok mesin cutaway: piston, stang piston, kruk berputar sesuai rpm */
