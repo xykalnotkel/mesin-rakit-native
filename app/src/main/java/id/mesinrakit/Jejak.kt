@@ -37,11 +37,14 @@ object Jejak {
     /**
      * true kalau percobaan terakhir berhenti sebelum waktunya.
      * Berkas yang tidak ada dianggap aman: itu pemasangan baru, bukan crash.
+     *
+     * Catatan: tanda "!" di jejak TIDAK dianggap crash. Dulu itu bikin
+     * aplikasi terkunci selamanya karena peringatan (lanskap ditolak, dsb)
+     * diperlakukan sebagai kegagalan fatal.
      */
     fun terputus(ctx: Context, tanda: String): Boolean {
         val isi = try { baca(ctx) } catch (e: Exception) { "" }
-        if (isi.isBlank()) return false            // pemasangan baru, bukan crash
-        if (isi.contains("!")) return true         // ada tanda error tercatat
+        if (isi.isBlank()) return false
         return !isi.contains(tanda)
     }
 }

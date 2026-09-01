@@ -8,6 +8,7 @@ import android.os.VibratorManager
 import id.mesinrakit.audio.AudioEngine
 import id.mesinrakit.core.*
 import id.mesinrakit.data.*
+import id.mesinrakit.data.Pack
 import id.mesinrakit.model.*
 import id.mesinrakit.scene.*
 import id.mesinrakit.ui.Scene
@@ -319,5 +320,39 @@ class App(val ctx: Context, val view: GameView) {
         sb.append("MR1|").append(build.name.replace('|', ' ')).append('|')
         sb.append(build.items.values.joinToString(","))
         return android.util.Base64.encodeToString(sb.toString().toByteArray(), android.util.Base64.NO_WRAP)
+    }
+
+    /** salin desain lengkap (MRPACK1) ke clipboard */
+    fun salinPack() {
+        try {
+            val teks = Pack.encode(build, "pack")
+            val cm = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            cm.setPrimaryClip(android.content.ClipData.newPlainText("mesin rakit", teks))
+            toast.tampil("Kode MRPACK1 tersalin", C.ACC)
+        } catch (e: Exception) {
+            toast.tampil("Gagal menyalin kode", C.RED)
+        }
+    }
+
+    /** tempel MRPACK1 dari clipboard, langsung dipakai */
+    fun tempelPack(): Boolean {
+        return try {
+            val cm = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val teks = cm.primaryClip?.getItemAt(0)?.coerceToText(ctx)?.toString() ?: ""
+            val data = Pack.decode(teks)
+            if (data == null) {
+                toast.tampil("Clipboard bukan kode MRPACK1", C.RED)
+                false
+            } else {
+                Pack.terapkan(this, data)
+                bangunUlang()
+                simpan()
+                toast.tampil("Desain \"${data.name}\" dipasang", C.GREEN)
+                true
+            }
+        } catch (e: Exception) {
+            toast.tampil("Gagal menempel kode", C.RED)
+            false
+        }
     }
 }

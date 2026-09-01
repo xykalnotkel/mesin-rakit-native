@@ -30,10 +30,18 @@ class GameView(ctx: Context) : SurfaceView(ctx), SurfaceHolder.Callback {
     private var frames = 0
     private var sudahTandai = false
 
-    init { holder.addCallback(this) }
+    init {
+        /* software: hindari crash driver GPU di HP tertentu.
+           dulu ada di manifest, terhapus waktu tema dikupas. */
+        setLayerType(LAYER_TYPE_SOFTWARE, null)
+        isFocusable = true
+        isFocusableInTouchMode = true
+        holder.addCallback(this)
+    }
 
     override fun surfaceCreated(h: SurfaceHolder) {
         vw = width.toFloat(); vh = height.toFloat()
+        if (!::app.isInitialized) return
         jalan = true
         last = System.nanoTime()
         thread = Thread { loop() }.apply { name = "mesin-render"; start() }
@@ -41,16 +49,27 @@ class GameView(ctx: Context) : SurfaceView(ctx), SurfaceHolder.Callback {
 
     override fun surfaceChanged(h: SurfaceHolder, f: Int, w: Int, hh: Int) {
         vw = w.toFloat(); vh = hh.toFloat()
+        /* jaga-jaga: kalau surfaceCreated keburu jalan sebelum App siap,
+           thread gambar belum hidup. Hidupkan di sini. */
+        if (!jalan && ::app.isInitialized) {
+            jalan = true
+            last = System.nanoTime()
+            thread = Thread { loop() }.apply { name = "mesin-render"; start() }
+        }
     }
 
     override fun surfaceDestroyed(h: SurfaceHolder) {
         jalan = false
-        try { thread?.join(500) } catch (e: Exception) {}
+        try { thread?.join(1500) } catch (e: Exception) {}
         thread = null
     }
 
     private fun loop() {
         while (jalan) {
+            if (!::app.isInitialized) {
+                try { Thread.sleep(16) } catch (e: Exception) {}
+                continue
+            }
             val now = System.nanoTime()
             var dt = (now - last) / 1_000_000_000f
             last = now

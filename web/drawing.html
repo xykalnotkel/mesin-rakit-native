@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Drawing — MESIN RAKIT Studio</title>
+  <meta name="description" content="Gambar body, rangka, atau part kendaraan. Hasilnya kode MRPACK1 yang langsung bisa ditempel di game." />
+  <link rel="icon" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="/"><img src="/assets/logo.png" alt="" /> MESIN RAKIT</a>
+    <div class="nav-links">
+      <a href="/">Beranda</a>
+      <a href="/#unduh">Unduh</a>
+      <a href="/drawing" class="on">Drawing</a>
+      <a href="/cara">Cara main</a>
+    </div>
+    <a class="btn btn-utama" href="/#unduh">Unduh APK</a>
+  </nav>
+
+  <div class="studio">
+    <aside class="side">
+      <div class="kicker">Studio</div>
+      <h2 style="margin:6px 0 12px;font-size:22px">Drawing</h2>
+      <div class="tabs" id="tabs">
+        <button class="tab on" data-kind="body">Body</button>
+        <button class="tab" data-kind="frame">Rangka</button>
+        <button class="tab" data-kind="part">Part</button>
+      </div>
+      <label>Nama desain</label>
+      <input id="nama" type="text" maxlength="48" placeholder="Bebek malam" value="Desain baru" />
+      <label>Pembuat</label>
+      <input id="author" type="text" maxlength="48" placeholder="nama kamu" />
+      <div id="alat-body">
+        <label>Alat</label>
+        <div class="tools">
+          <button class="btn" data-tool="brush" id="t-brush">Kuas</button>
+          <button class="btn" data-tool="erase" id="t-erase">Hapus</button>
+        </div>
+        <label>Cat body (12 warna game)</label>
+        <div class="swatches" id="swatches"></div>
+      </div>
+      <div id="alat-frame" hidden>
+        <label>Jenis simpul</label>
+        <select id="nk">
+          <option value="free">Bebas</option>
+          <option value="headstock">Dudukan stang</option>
+          <option value="engine">Dudukan mesin</option>
+          <option value="axleR">As roda belakang</option>
+          <option value="seat">Dudukan jok</option>
+        </select>
+        <label>Bahan pipa</label>
+        <select id="fmat">
+          <option value="besi">Besi</option>
+          <option value="alumunium">Alumunium</option>
+          <option value="chrome">Chrome</option>
+          <option value="titanium">Titanium</option>
+        </select>
+        <p class="hint">Klik kosong = simpul baru. Klik simpul lalu simpul lain = pipa. Butuh stang, mesin, dan as belakang.</p>
+        <button class="btn" id="hapus-node">Hapus simpul terpilih</button>
+      </div>
+      <div id="alat-part" hidden>
+        <label>Kategori usulan</label>
+        <select id="partcat">
+          <option value="body">Body / fairing</option>
+          <option value="blok">Blok mesin</option>
+          <option value="knalpot">Knalpot</option>
+          <option value="rangka">Rangka</option>
+          <option value="roda">Roda</option>
+          <option value="lain">Lainnya</option>
+        </select>
+        <p class="hint">Gambar siluet part. Usulan ini dikirim ke studio, belum otomatis masuk katalog game.</p>
+        <button class="btn" id="clear-part">Kosongkan kanvas</button>
+      </div>
+    </aside>
+
+    <main class="stage">
+      <canvas id="board" class="board" width="980" height="520"></canvas>
+      <div class="stat" id="stat">Grid 14×6 · mode body</div>
+    </main>
+
+    <aside class="rail">
+      <div class="kicker">Berkas MRPACK1</div>
+      <p class="hint">Format yang sama dibaca tombol <b>Tempel</b> di menu game.</p>
+      <textarea id="pack" spellcheck="false"></textarea>
+      <div class="tools">
+        <button class="btn btn-utama" id="salin">Salin kode</button>
+        <button class="btn" id="unduh-berkas">Unduh .mrpack</button>
+      </div>
+      <label>Email kamu (opsional, buat balasan)</label>
+      <input id="email" type="email" placeholder="kamu@email.com" />
+      <label>Pesan</label>
+      <input id="pesan" type="text" maxlength="200" placeholder="Catatan singkat" />
+      <button class="btn btn-amber" id="kirim" style="width:100%;margin-top:12px">Kirim ke request@xyspace.my.id</button>
+      <p class="hint" id="kirim-status"></p>
+    </aside>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="/assets/studio.js"></script>
+</body>
+</html>

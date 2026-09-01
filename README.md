@@ -23,17 +23,17 @@ Android, dan suara disintesis sendiri lewat AudioTrack.
 
 ```
 app/src/main/java/id/mesinrakit/
-  MainActivity.kt     activity, mode layar penuh, siklus hidup
+  BukaActivity.kt     pintu masuk + layar game
   GameView.kt         SurfaceView, loop render, sentuhan multi jari
   App.kt              keadaan aplikasi, pindah layar, simpan dan muat
-  core/               matematika, filter biquad, tema, font, helper gambar
-  data/               katalog part, preset, pengendara, map, gaya knalpot
-  model/              spesifikasi mesin, fisika kendaraan, map, rangka
-  audio/              mesin suara: siklus mesin dan lapisan hidup
-  scene/              menu, bengkel, bengkel rangka, dyno, pit, peta, jalan
-  ui/                 kerangka scene dan widget kanvas
+  data/Pack.kt        format tukar desain MRPACK1
+  core/ data/ model/ audio/ scene/ ui/
+web/                  situs unduhan + studio Drawing (Vercel)
 test/TestModel.kt     uji logika model, jalan langsung di JVM
 ```
+
+Situs: [mesin.xyspace.my.id](https://mesin.xyspace.my.id)
+Studio Drawing mengeluarkan berkas **MRPACK1** yang bisa ditempel di menu game.
 
 ## Cara membangun
 

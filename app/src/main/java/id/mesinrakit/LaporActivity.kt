@@ -79,11 +79,13 @@ class LaporActivity : Activity() {
         })
         lay.addView(tombol("HAPUS LOG") {
             try { deleteFile(NAMA_BERKAS) } catch (e: Exception) { }
+            Jejak.bersih(this)
             finish()
         })
         lay.addView(tombol("COBA MAIN LAGI") {
             // bersihkan jejak supaya masuk ke game, bukan balik ke sini lagi
             Jejak.bersih(this)
+            try { deleteFile(NAMA_BERKAS) } catch (e: Exception) { }
             startActivity(Intent(this, BukaActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
             finish()

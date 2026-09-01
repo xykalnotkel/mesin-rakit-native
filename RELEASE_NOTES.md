@@ -30,6 +30,23 @@ Cara main
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
 
+Yang baru di 1.4.1
+- Format desain MRPACK1. Menu punya tombol Salin kode dan Tempel.
+  Desain rangka dan body dari studio web (mesin.xyspace.my.id/drawing)
+  langsung kepasang setelah ditempel.
+- Biang "terhenti terus": kalau session sebelumnya belum sampai tanda aman,
+  aplikasi langsung menutup diri dan membuka laporan. Setelah itu jejak
+  tidak pernah dibersihkan, jadi tiap buka langsung ditutup lagi. Sekarang
+  jejak lama cuma dicatat, permainan tetap dibuka.
+- Tanda seru di jejak (peringatan lanskap, latar, dsb) tidak lagi dianggap
+  crash. Dulu satu peringatan mengunci aplikasi selamanya.
+- MainActivity yang sudah dihapus masih tertulis di manifest: dibuang.
+- Dialog sistem "telah terhenti" tidak lagi dipanggil dari penangkap error.
+- Rendering software dikembalikan (cegah crash driver GPU).
+- Boot game selesai sebelum SurfaceView hidup, supaya thread gambar tidak
+  merender layar yang belum siap.
+- Ganti orientasi tidak lagi merestart aktivitas di tengah onCreate.
+
 Yang baru di 1.4.0
 - Layar game dan layar pembuka digabung jadi satu. Layar pembuka terbukti
   selalu berhasil jalan, jadi sekarang seluruh permainan hidup di dalamnya.

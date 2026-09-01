@@ -16,6 +16,8 @@ class MenuScene(app: App) : Scene(app) {
     private var idJalan = -1
     private var idPreset = -1
     private var idBantuan = -1
+    private var idSalin = -1
+    private var idTempel = -1
     private var presetKe = 0
     private var bukaPreset = false
     private var bukaBantuan = false
@@ -60,6 +62,9 @@ class MenuScene(app: App) : Scene(app) {
         idJalan = tombol(c, "JALAN", bx, by, bw, bh, BTN_UTAMA, T.sp(16f), s.valid); by += bh + gap * 2
         idBantuan = tombol(c, "Cara main", bx, by, bw * 0.48f, bh * 0.8f, BTN_HANTU, T.sp(13f))
         idPreset = tombol(c, "Preset", bx + bw * 0.52f, by, bw * 0.48f, bh * 0.8f, BTN_HANTU, T.sp(13f))
+        by += bh * 0.8f + gap
+        idSalin = tombol(c, "Salin kode", bx, by, bw * 0.48f, bh * 0.72f, BTN_HANTU, T.sp(12f))
+        idTempel = tombol(c, "Tempel", bx + bw * 0.52f, by, bw * 0.48f, bh * 0.72f, BTN_HANTU, T.sp(12f))
 
         /* uang */
         c.rr(w * 0.70f, h * 0.10f, w * 0.25f, 34f, 17f, T.fill(C.PANEL))
@@ -111,7 +116,9 @@ class MenuScene(app: App) : Scene(app) {
             "MAP: pilih lintasan. Lintasan Lurus datar tanpa rintangan, khusus buat setting.\n\n" +
             "JALAN: tombol GAS dan REM di layar, atau panah atas dan bawah di keyboard. " +
             "Q dan E buat oper gigi manual, R buat bangun kalau terbalik. " +
-            "Tabrakan merusak part: tenaga turun dan mesin bisa bocor. Servis di Bengkel."
+            "Tabrakan merusak part: tenaga turun dan mesin bisa bocor. Servis di Bengkel.\n\n" +
+            "KODE DESAIN: Salin kode menyalin MRPACK1 ke clipboard. Tempel kode dari studio web " +
+            "supaya rangka dan body langsung kepasang. Studio: mesin.xyspace.my.id/drawing"
         c.wrap(teks, x + 20f, y + 44f, pw - 40f, T.sp(13.5f), C.TEXT)
         tombol(c, "Tutup", x + pw - 100f, y + ph - 46f, 80f, 34f, BTN_NORMAL, T.sp(13f), true, 998)
     }
@@ -147,6 +154,8 @@ class MenuScene(app: App) : Scene(app) {
             idLog -> { app.hapusLog(); idLog = -1 }
             idPreset -> bukaPreset = true
             idBantuan -> bukaBantuan = true
+            idSalin -> app.salinPack()
+            idTempel -> app.tempelPack()
             998 -> bukaBantuan = false
             999 -> bukaPreset = false
             else -> if (h.extra in 1000..1100) {

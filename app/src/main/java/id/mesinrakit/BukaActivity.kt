@@ -4,18 +4,19 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
+import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.widget.TextView
 import id.mesinrakit.core.T
 
 /**
  * Satu-satunya layar utama.
  *
- * Dulunya ada layar pembuka dan layar game yang terpisah. Layar pembuka
- * terbukti selalu berhasil jalan, sedangkan layar game mati bahkan sebelum
- * baris pertama kodenya dipanggil. Karena itu sekarang semua digabung di
- * sini: aktivitas yang memakai tema standar, dan setiap langkah dicatat
- * supaya kalau ada yang gagal, langsung kelihatan di langkah ke berapa.
+ * PENTING: jangan pernah menutup aktivitas ini cuma karena jejak startup
+ * sebelumnya belum sampai tanda aman. Itu yang bikin aplikasi "terhenti
+ * terus" tiap dibuka: sekali gagal, seterusnya langsung finish() tanpa
+ * sempat masuk game.
  */
 class BukaActivity : android.app.Activity() {
 
@@ -24,38 +25,44 @@ class BukaActivity : android.app.Activity() {
 
     private fun bukaLaporan() {
         try {
+            /* Jangan CLEAR_TASK: itu bisa membunuh seluruh task, termasuk
+               laporan yang baru mau muncul, apalagi laporan jalan di proses
+               terpisah. Cukup NEW_TASK supaya tetap kelihatan. */
             startActivity(Intent(this, LaporActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or
-                          Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                          Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         } catch (e: Exception) { }
     }
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
 
-        /* Penangkap error dipasang paling awal. */
+        val ctx = applicationContext
         val bawaan = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
-            try { Jejak.tandai(this, "! error: " + (e.javaClass.simpleName ?: "?")) } catch (x: Exception) { }
+            try { Jejak.tandai(ctx, "! error: " + (e.javaClass.simpleName ?: "?")) } catch (x: Exception) { }
             try { appRef?.catat(e) } catch (x: Exception) { }
-            try { Lapor.tulis(this, Lapor.jejak(e) + "\n\n" + Jejak.baca(this)) } catch (x: Exception) { }
-            bukaLaporan()
-            try { bawaan?.uncaughtException(t, e) } catch (x: Exception) { }
+            try { Lapor.tulis(ctx, Lapor.jejak(e) + "\n\n" + Jejak.baca(ctx)) } catch (x: Exception) { }
+            try {
+                startActivity(Intent(ctx, LaporActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            } catch (x: Exception) { }
+            /* Jangan panggil handler bawaan: itu yang memunculkan dialog
+               sistem "telah terhenti". Laporan kita sudah cukup. */
+            if (bawaan != null && bawaan.javaClass.name.startsWith("id.mesinrakit")) {
+                try { bawaan.uncaughtException(t, e) } catch (x: Exception) { }
+            }
+            try { Thread.sleep(250) } catch (x: Exception) { }
             Process.killProcess(Process.myPid())
         }
 
-        /* Kalau percobaan terakhir berhenti sebelum tanda aman, tampilkan
-           dulu laporannya supaya pemain bisa membaca dan mengirimnya. */
-        if (Jejak.terputus(this, Jejak.TANDA_AMAN)) {
-            Jejak.tandai(this, "00a laporan dibuka otomatis")
-            bukaLaporan()
-            finish()
-            return
-        }
-
+        /* Jejak lama cuma buat catatan, BUKAN alasan menutup aplikasi.
+           Kalau session sebelumnya putus, tetap masuk game. Menu sudah
+           punya panel error kalau ada log tersimpan. */
+        val putus = Jejak.terputus(this, Jejak.TANDA_AMAN)
         Jejak.bersih(this)
         Jejak.tandai(this, "01 mulai")
+        if (putus) Jejak.tandai(this, "01b session sebelumnya putus, tetap lanjut")
+
         try {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             Jejak.tandai(this, "02 flag jendela")
@@ -70,17 +77,41 @@ class BukaActivity : android.app.Activity() {
             appRef = a
             view.app = a
             Jejak.tandai(this, "08 App dibuat")
+            /* boot dulu supaya scene siap sebelum SurfaceView hidup
+               dan thread gambar mulai jalan. */
+            a.boot()
+            Jejak.tandai(this, "08b boot selesai")
             setContentView(view)
             mintaFokus()
             Jejak.tandai(this, "09 tampilan terpasang")
-            a.boot()
             Jejak.tandai(this, Jejak.TANDA_AMAN)
         } catch (e: Throwable) {
             try { appRef?.catat(e) } catch (x: Exception) { }
             Jejak.tandai(this, "! gagal: " + (e.javaClass.simpleName ?: "?"))
             try { Lapor.tulis(this, Lapor.jejak(e) + "\n\n" + Jejak.baca(this)) } catch (x: Exception) { }
+            /* Jangan finish(): tampilkan pesan di layar yang sama supaya
+               aplikasi tidak "terhenti" di mata sistem. */
+            tampilGagal(e)
+        }
+    }
+
+    /** Kalau game gagal disiapkan, tetap ada layar yang hidup. */
+    private fun tampilGagal(e: Throwable) {
+        try {
+            val tv = TextView(this).apply {
+                text = "MESIN RAKIT gagal membuka permainan.\n\n" +
+                    (e.javaClass.simpleName ?: "?") + ": " + (e.message ?: "") +
+                    "\n\nKetuk di mana saja untuk membuka laporan."
+                setTextColor(0xFFD6E2F0.toInt())
+                textSize = 16f
+                setPadding(48, 48, 48, 48)
+                setBackgroundColor(0xFF070C14.toInt())
+                gravity = Gravity.CENTER
+                setOnClickListener { bukaLaporan() }
+            }
+            setContentView(tv)
+        } catch (x: Exception) {
             bukaLaporan()
-            finish()
         }
     }
 
@@ -90,12 +121,12 @@ class BukaActivity : android.app.Activity() {
             requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             Jejak.tandai(this, "03 lanskap sensor")
         } catch (e: Throwable) {
-            Jejak.tandai(this, "! lanskap sensor ditolak: ${e.javaClass.simpleName}")
+            Jejak.tandai(this, "03 lanskap sensor ditolak: ${e.javaClass.simpleName}")
             try {
                 requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 Jejak.tandai(this, "03 lanskap biasa")
             } catch (x: Throwable) {
-                Jejak.tandai(this, "! lanskap biasa ditolak: ${x.javaClass.simpleName}")
+                Jejak.tandai(this, "03 lanskap biasa ditolak: ${x.javaClass.simpleName}")
             }
         }
     }
@@ -106,7 +137,7 @@ class BukaActivity : android.app.Activity() {
                 android.graphics.drawable.ColorDrawable(android.graphics.Color.parseColor("#FF070C14")))
             Jejak.tandai(this, "04 latar jendela")
         } catch (e: Throwable) {
-            Jejak.tandai(this, "! latar jendela gagal: ${e.javaClass.simpleName}")
+            Jejak.tandai(this, "04 latar jendela gagal: ${e.javaClass.simpleName}")
         }
     }
 
@@ -132,7 +163,7 @@ class BukaActivity : android.app.Activity() {
             }
             Jejak.tandai(this, "05 bilah disembunyikan")
         } catch (e: Throwable) {
-            Jejak.tandai(this, "! sembunyikan bilah gagal: ${e.javaClass.simpleName}")
+            Jejak.tandai(this, "05 sembunyikan bilah gagal: ${e.javaClass.simpleName}")
         }
     }
 

@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/drawing", "destination": "/drawing.html" },
+    { "source": "/studio", "destination": "/drawing.html" },
+    { "source": "/cara", "destination": "/cara.html" }
+  ]
+}

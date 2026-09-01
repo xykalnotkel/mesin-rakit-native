@@ -13,26 +13,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:theme="@style/TemaMesinRakit"
+        android:hardwareAccelerated="false"
         android:supportsRtl="false">
 
-        <!-- pintu masuk: tema standar, isi seminimal mungkin -->
+        <!-- pintu masuk sekaligus layar game.
+             configChanges: supaya setRequestedOrientation tidak merestart
+             aktivitas di tengah onCreate (itu yang dulu dianggap crash). -->
         <activity
             android:name="id.mesinrakit.BukaActivity"
             android:theme="@style/TemaBiasa"
-            android:exported="true">
+            android:exported="true"
+            android:hardwareAccelerated="false"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|screenLayout|uiMode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- layar game -->
-        <!-- catatan: orientasi lanskap dan configChanges sengaja tidak
-             ditulis di sini. Keduanya dipasang lewat kode supaya bisa
-             ditangkap kalau ada HP yang menolaknya (lihat MainActivity). -->
-        <activity
-            android:name="id.mesinrakit.MainActivity"
-            android:exported="false" />
 
         <!-- alat uji mandiri, muncul sebagai ikon kedua di laci aplikasi -->
         <activity
