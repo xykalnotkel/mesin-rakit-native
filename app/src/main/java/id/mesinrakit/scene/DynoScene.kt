@@ -51,7 +51,7 @@ class DynoScene(app: App) : Scene(app) {
         }
     }
 
-    override fun enter() { rpm = app.spec.idleRPM; siapkanKurva() }
+    override fun enter() { rpm = app.spec.idleRPM; siapkanKurva(); app.mulaiAudio() }
 
     override fun update(dt: Float) {
         val s = app.spec

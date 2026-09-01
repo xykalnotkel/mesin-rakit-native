@@ -23,7 +23,7 @@ class MainActivity : android.app.Activity() {
             try { app.catat(e) } catch (x: Exception) { }
             bawaan?.uncaughtException(t, e)
         }
-        app.boot()
+        try { app.boot() } catch (e: Exception) { app.catat(e) }
     }
 
     private fun hideBar() {
@@ -52,7 +52,14 @@ class MainActivity : android.app.Activity() {
 
     override fun onResume() {
         super.onResume()
-        try { view.app.audio.start() } catch (e: Exception) { view.app.catat(e) }
+        /* audio hanya dinyalakan lagi kalau kita memang sedang di layar
+           yang butuh suara. Jadi gangguan audio gak pernah menghentikan
+           aplikasi waktu pertama kali dibuka. */
+        try {
+            val butuh = view.app.scene is id.mesinrakit.scene.DynoScene ||
+                        view.app.scene is id.mesinrakit.scene.JalanScene
+            if (butuh) view.app.mulaiAudio()
+        } catch (e: Exception) { }
     }
 
     override fun onPause() {

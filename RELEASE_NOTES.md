@@ -30,6 +30,13 @@ Cara main
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
 
+Yang dibenahi di 1.0.3
+- Audio tidak lagi disentuh sama sekali waktu aplikasi dibuka. Mesin suara
+  baru hidup waktu masuk Dyno atau Jalan, jadi kalau ada HP yang menolak
+  format audionya, aplikasi tetap masuk ke menu dan bisa dimainkan.
+- Layar disiapkan paling awal saat boot. Kalau ada yang gagal, menu tetap
+  tampil bersama pesan error, bukan layar gelap.
+
 Yang dibenahi di 1.0.2
 - Thread audio tidak lagi memakai prioritas maksimum dan selalu memberi
   jeda kalau penulisan gagal. Ini biang utama aplikasi tiba-tiba berhenti

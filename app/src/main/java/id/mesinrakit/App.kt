@@ -53,8 +53,16 @@ class App(val ctx: Context, val view: GameView) {
     }
 
     fun boot() {
-        muat()
-        bangunUlang()
+        /* layar disiapkan paling awal: kalau ada yang gagal setelah ini,
+           pemain tetap lihat menu dan pesan error, bukan layar gelap. */
+        scene = layar("menu")
+        try {
+            muat()
+        } catch (e: Exception) {
+            catat(e)
+            try { pasangPreset(build, id.mesinrakit.data.PRESETS[0]) } catch (x: Exception) { }
+        }
+        try { bangunUlang() } catch (e: Exception) { catat(e) }
         pindah("menu")
     }
 
@@ -70,8 +78,24 @@ class App(val ctx: Context, val view: GameView) {
     fun pindah(nama: String) {
         if (::scene.isInitialized && scenes.values.contains(scene)) scene.leave()
         audio.update(0.016, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, true)
+        /* audio cuma hidup di dyno dan jalan. Di layar lain dimatikan supaya
+           gangguan di perangkat tertentu gak bikin aplikasi berhenti. */
+        if (nama != "dyno" && nama != "jalan") {
+            try { audio.stop() } catch (e: Exception) { }
+        }
         scene = layar(nama)
         scene.enter()
+    }
+
+    /** nyalakan audio dengan aman. Gagal pun aplikasi tetap jalan. */
+    fun mulaiAudio() {
+        if (audio.ready) return
+        try {
+            if (!audio.start()) toast.tampil("Audio gagal dibuka, game tetap jalan", C.AMBER)
+        } catch (e: Exception) {
+            try { toast.tampil("Audio gagal dibuka, game tetap jalan", C.AMBER) } catch (x: Exception) { }
+            catat(e)
+        }
     }
 
     fun gantiMap(id: String) {
@@ -85,6 +109,7 @@ class App(val ctx: Context, val view: GameView) {
             toast.tampil("Rakitan belum lengkap: ${spec.missing.take(2).joinToString(", ")}", C.RED)
             return
         }
+        mulaiAudio()
         val v = Vehicle(spec, build, map)
         v.onShift = { audio.clunk() }
         vehicle = v
