@@ -29,5 +29,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- layar laporan error, proses terpisah supaya tetap muncul
+             walaupun proses utama sudah dimatikan sistem -->
+        <activity
+            android:name="id.mesinrakit.LaporActivity"
+            android:process=":lapor"
+            android:exported="false"
+            android:label="Laporan Error"
+            android:theme="@style/TemaLapor" />
     </application>
 </manifest>

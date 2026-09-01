@@ -9,4 +9,8 @@
         <item name="android:colorBackground">#FF070C14</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+    <style name="TemaLapor" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:colorBackground">#FF070C14</item>
+        <item name="android:windowBackground">#FF070C14</item>
+    </style>
 </resources>

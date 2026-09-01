@@ -30,6 +30,20 @@ Cara main
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
 
+Yang baru di 1.1.1
+- Layar laporan error. Kalau aplikasi berhenti, layar ini muncul sendiri
+  dan menampilkan pesan errornya lengkap dengan jejak startup, plus tombol
+  salin supaya gampang dikirim. Layarnya jalan di proses terpisah, jadi
+  tetap muncul walaupun proses utama sudah dimatikan.
+- Penanda jejak: tiap langkah startup dicatat ke berkas. Jadi sekalipun
+  aplikasi mati sebelum sempat menyimpan pesan error, tetap kelihatan dia
+  berhenti di langkah ke berapa.
+- onPause, onDestroy, dan tombol balik sudah diamankan: tidak lagi
+  mengakses tampilan yang belum jadi, yang kemarin bisa menutupi error
+  aslinya.
+- Catatan error sekarang menyertakan merek HP, versi Android, dan versi
+  aplikasi.
+
 Yang baru di 1.1.0
 - APK sekarang dibangun sebagai rilis dan ditandatangani dengan kunci tetap.
   Artinya pembaruan bisa langsung ditimpa tanpa harus hapus aplikasi lama,
