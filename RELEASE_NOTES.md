@@ -30,6 +30,13 @@ Cara main
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
 
+Yang baru di 1.3.0
+- Alat uji mandiri. Sekarang ada ikon kedua di laci aplikasi bernama
+  UJI MESIN. Buka ikon itu dan dia akan menguji satu per satu: activity,
+  penyimpanan berkas, font kustom, kanvas, model mesin, audio, dan
+  permukaan gambar. Hasilnya ditulis di layar, jadi langsung kelihatan
+  bagian mana yang bermasalah di HP tertentu.
+
 Yang baru di 1.2.1
 - Catatan error sekarang juga ditulis ke folder Unduhan atas nama
   crash-mesin-rakit.txt. Tidak butuh izin apa pun, dan bisa dibuka

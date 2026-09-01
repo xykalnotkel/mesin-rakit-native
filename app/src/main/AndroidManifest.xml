@@ -33,6 +33,18 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false" />
 
+        <!-- alat uji mandiri, muncul sebagai ikon kedua di laci aplikasi -->
+        <activity
+            android:name="id.mesinrakit.UjiActivity"
+            android:theme="@style/TemaBiasa"
+            android:exported="true"
+            android:label="UJI MESIN">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <!-- layar laporan error, proses terpisah supaya tetap muncul
              walaupun proses utama sudah dimatikan sistem -->
         <activity
