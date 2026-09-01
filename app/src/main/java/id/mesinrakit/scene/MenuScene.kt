@@ -51,9 +51,9 @@ class MenuScene(app: App) : Scene(app) {
         /* tombol aksi */
         val bx = w * 0.70f
         val bw = w * 0.25f
-        var by = h * 0.24f
-        val bh = h * 0.088f
-        val gap = h * 0.014f
+        var by = h * 0.22f
+        val bh = max(48f, h * 0.078f)
+        val gap = h * 0.010f
         idBengkel = tombol(c, "BENGKEL  (rakit part)", bx, by, bw, bh, BTN_UTAMA, T.sp(15f)); by += bh + gap
         idRangka = tombol(c, "RANGKA  (bentuk sendiri)", bx, by, bw, bh, BTN_NORMAL, T.sp(15f)); by += bh + gap
         idDyno = tombol(c, "DYNO  (dengar suaranya)", bx, by, bw, bh, BTN_NORMAL, T.sp(15f)); by += bh + gap

@@ -260,20 +260,20 @@ class JalanScene(app: App) : Scene(app), KeyHandler {
         if (rep.parts > 0) c.tx("${rep.parts} part rusak", w * 0.035f, h * 0.06f + 120f, T.sp(11f), C.RED, F_SEMI)
 
         /* tombol */
-        val bw = w * 0.13f
-        val bh = h * 0.20f
-        val by = h * 0.70f
-        idRem = tombol(c, "REM", w * 0.03f, by, bw, bh, BTN_BAHAYA, T.sp(18f), true, 0, pressed.contains(idRem))
-        idGas = tombol(c, "GAS", w - bw - w * 0.03f, by, bw, bh, BTN_UTAMA, T.sp(18f), true, 0, pressed.contains(idGas))
+        val bw = max(w * 0.14f, 110f)
+        val bh = max(h * 0.20f, 96f)
+        val by = h * 0.68f
+        idRem = tombol(c, "REM", w * 0.03f, by, bw, bh, BTN_BAHAYA, T.sp(20f), true, 0, pressed.contains(idRem))
+        idGas = tombol(c, "GAS", w - bw - w * 0.03f, by, bw, bh, BTN_UTAMA, T.sp(20f), true, 0, pressed.contains(idGas))
         if (!s.cvt) {
-            idGigiDn = tombol(c, "G-", w - bw - w * 0.03f - 66f, by + bh * 0.10f, 58f, bh * 0.36f, BTN_NORMAL, T.sp(15f))
-            idGigiUp = tombol(c, "G+", w - bw - w * 0.03f - 66f, by + bh * 0.54f, 58f, bh * 0.36f, BTN_NORMAL, T.sp(15f))
-            idManual = tombol(c, if (v.manual) "MANUAL" else "OTO", w - bw - w * 0.03f - 132f, by + bh * 0.10f, 60f, bh * 0.36f,
-                BTN_NORMAL, T.sp(12f), true, 0, v.manual)
+            idGigiDn = tombol(c, "G-", w - bw - w * 0.03f - 78f, by + bh * 0.08f, 70f, bh * 0.38f, BTN_NORMAL, T.sp(16f))
+            idGigiUp = tombol(c, "G+", w - bw - w * 0.03f - 78f, by + bh * 0.54f, 70f, bh * 0.38f, BTN_NORMAL, T.sp(16f))
+            idManual = tombol(c, if (v.manual) "MANUAL" else "OTO", w - bw - w * 0.03f - 156f, by + bh * 0.08f, 72f, bh * 0.38f,
+                BTN_NORMAL, T.sp(13f), true, 0, v.manual)
         }
-        idReset = tombol(c, "Bangun", w * 0.03f, by - 46f, 92f, 38f, BTN_NORMAL, T.sp(13f), abs(v.ang) > 1.0)
-        idUlang = tombol(c, "Ulang", w * 0.03f + 100f, by - 46f, 92f, 38f, BTN_HANTU, T.sp(13f))
-        idKeluar = tombol(c, "Pit", w - 110f, h * 0.05f, 90f, 38f, BTN_HANTU, T.sp(13f))
+        idReset = tombol(c, "Bangun", w * 0.03f, by - 52f, 110f, 44f, BTN_NORMAL, T.sp(14f), abs(v.ang) > 1.0)
+        idUlang = tombol(c, "Ulang", w * 0.03f + 118f, by - 52f, 110f, 44f, BTN_HANTU, T.sp(14f))
+        idKeluar = tombol(c, "Pit", w - 128f, h * 0.05f, 108f, 44f, BTN_HANTU, T.sp(14f))
 
         /* pesan */
         var msg = ""
@@ -313,125 +313,23 @@ class JalanScene(app: App) : Scene(app), KeyHandler {
         }
     }
 
-    /* gambar kendaraan tampak samping di jalan */
+    /* gambar kendaraan tampak samping di jalan. Y body ke atas, layar Y ke bawah. */
     private fun gambarKendaraanJalan(c: Canvas, v: Vehicle, cx: Float, cy: Float, ppm: Float) {
-        val s = v.spec
-        val b = app.build
-        val r = (s.wheelR * ppm).toFloat()
-        val ca = cos(v.ang).toFloat()
-        val sa = -sin(v.ang).toFloat()   // layar: y ke bawah
-        fun px(ox: Double, oy: Double) = cx + (ca * ox - sa * oy).toFloat() * ppm
-        fun py(ox: Double, oy: Double) = cy + (sa * ox + ca * oy).toFloat() * ppm
-
-        c.save()
-        /* roda */
-        for (i in v.wheels.indices) {
-            val wh = v.wheels[i]
-            val wx = px(wh.ox, wh.oy)
-            val wy = py(wh.ox, wh.oy)
-            c.dot(wx, wy, r, T.fill(0xFF15191F.toInt()))
-            c.dot(wx, wy, r * 0.62f, T.fill(0xFF2A3444.toInt()))
-            /* jari-jari */
-            for (k in 0 until 6) {
-                val a = wh.spinAng + k * PI / 3
-                c.drawLine(wx, wy, wx + cos(a).toFloat() * r * 0.58f, wy + sin(a).toFloat() * r * 0.58f,
-                    T.stroke(0xFF8A97A8.toInt(), max(1f, r * 0.07f)))
-            }
-            c.dot(wx, wy, r * 0.16f, T.fill(0xFF9AA7B8.toInt()))
-            c.dot(wx, wy, r, T.stroke(0xFF3A4350.toInt(), max(1f, r * 0.12f)))
-        }
-
-        /* body dari cat yang digambar pemain */
-        val bodyCol = C.PAINTS.getOrElse(b.colorIdx) { C.ACC }
-        val selCat = b.paint.keys.toList()
-        if (selCat.isNotEmpty()) {
-            var c0 = 99; var r0 = 99; var c1 = -1; var r1 = -1
-            for (k in selCat) {
-                val a = k.split(",")
-                val cc = a[0].toInt(); val rr = a[1].toInt()
-                c0 = min(c0, cc); c1 = max(c1, cc); r0 = min(r0, rr); r1 = max(r1, rr)
-            }
-            val cw = (c1 - c0 + 1).toFloat()
-            val chh = (r1 - r0 + 1).toFloat()
-            val sel = 0.42f / max(cw, chh)
-            for (k in selCat) {
-                val a = k.split(",")
-                val cc = (a[0].toInt() - c0) - (cw - 1) / 2f
-                val rr = (a[1].toInt() - r0) - (chh - 1) / 2f
-                val bx = px(cc * sel * 2.4 - 0.15, -rr * sel * 2.0 + s.frameH * 0.9)
-                val by = py(cc * sel * 2.4 - 0.15, -rr * sel * 2.0 + s.frameH * 0.9)
-                c.rr(bx - sel * ppm * 0.9f, by - sel * ppm * 0.9f, sel * ppm * 1.8f, sel * ppm * 1.8f, sel * ppm * 0.3f, T.fill(bodyCol))
-            }
-        }
-
-        /* rangka */
-        val f = b.frame
-        val frameCol = 0xFF7C8798.toInt()
-        if (f != null && f.nodes.isNotEmpty()) {
-            val bd = f.bounds()
-            val bw2 = (bd[2] - bd[0]).coerceAtLeast(0.01)
-            val bh2 = (bd[3] - bd[1]).coerceAtLeast(0.01)
-            val sc = min(s.wheelbase / bw2, (s.frameH * 1.6) / bh2)
-            val ox0 = -(bd[0] + bd[2]) / 2 * sc
-            val oy0 = -(bd[1] + bd[3]) / 2 * sc + s.wheelR * 0.8
-            for (t in f.tubes) {
-                val a = f.nodes[t.a]; val b2 = f.nodes[t.b]
-                val ax = px((a.x - (bd[0] + bd[2]) / 2) * sc, (a.y - (bd[1] + bd[3]) / 2) * sc + s.wheelR * 0.8)
-                val ay = py((a.x - (bd[0] + bd[2]) / 2) * sc, (a.y - (bd[1] + bd[3]) / 2) * sc + s.wheelR * 0.8)
-                val bx = px((b2.x - (bd[0] + bd[2]) / 2) * sc, (b2.y - (bd[1] + bd[3]) / 2) * sc + s.wheelR * 0.8)
-                val by = py((b2.x - (bd[0] + bd[2]) / 2) * sc, (b2.y - (bd[1] + bd[3]) / 2) * sc + s.wheelR * 0.8)
-                val bow = ((a.bow + b2.bow) / 2).toFloat()
-                if (abs(bow) > 0.01f) {
-                    val path = Path()
-                    val dx = bx - ax; val dy = by - ay
-                    val len = hypot(dx.toDouble(), dy.toDouble()).toFloat().coerceAtLeast(0.01f)
-                    path.moveTo(ax, ay)
-                    path.quadTo((ax + bx) / 2 - dy / len * bow * len * 0.4f,
-                        (ay + by) / 2 + dx / len * bow * len * 0.4f, bx, by)
-                    c.drawPath(path, T.stroke(frameCol, max(2.5f, (t.dia / 0.032).toFloat() * r * 0.20f)))
-                } else {
-                    c.drawLine(ax, ay, bx, by, T.stroke(frameCol, max(2.5f, (t.dia / 0.032).toFloat() * r * 0.20f)))
-                }
-            }
-        } else {
-            val w1 = v.wheels.first()
-            val w2 = v.wheels.last()
-            c.drawLine(px(w2.ox, w2.oy), py(w2.ox, w2.oy), px(0.0, s.wheelR * 0.9), py(0.0, s.wheelR * 0.9),
-                T.stroke(frameCol, max(3f, r * 0.22f)))
-            c.drawLine(px(w1.ox, w1.oy), py(w1.ox, w1.oy), px(0.0, s.wheelR * 0.9), py(0.0, s.wheelR * 0.9),
-                T.stroke(frameCol, max(3f, r * 0.22f)))
-        }
-
-        /* blok mesin */
-        val blokW = (0.16 + s.cyl * 0.035).coerceAtMost(0.55)
-        c.rr(px(-blokW / 2, s.wheelR * 0.35).toFloat(), py(blokW / 2, s.wheelR * 1.2).toFloat(),
-            (blokW * ppm).toFloat(), (s.wheelR * 0.95 * ppm).toFloat(), r * 0.12f,
-            metal(px(-blokW / 2, s.wheelR * 0.35), py(-blokW / 2, s.wheelR * 0.35), px(blokW / 2, s.wheelR * 1.2), py(blokW / 2, s.wheelR * 1.2)))
-
-        /* knalpot */
-        c.drawLine(px(-0.1, s.wheelR * 0.8), py(-0.1, s.wheelR * 0.8),
-            px(-s.wheelbase * 0.55, s.wheelR * 0.7), py(-s.wheelbase * 0.55, s.wheelR * 0.7),
-            T.stroke(0xFFB9C4D4.toInt(), max(2.5f, r * 0.16f)))
-
-        /* jok */
-        c.rr(px(-s.wheelbase * 0.28, s.wheelR * 1.5), py(-s.wheelbase * 0.28, s.wheelR * 1.9),
-            (s.wheelbase * 0.36 * ppm).toFloat(), (s.wheelR * 0.32 * ppm).toFloat(), r * 0.12f, T.fill(0xFF101720.toInt()))
-
-        /* stang */
-        c.drawLine(px(s.wheelbase * 0.42, s.wheelR * 1.6), py(s.wheelbase * 0.42, s.wheelR * 1.6),
-            px(s.wheelbase * 0.52, s.wheelR * 2.1), py(s.wheelbase * 0.52, s.wheelR * 2.1),
-            T.stroke(0xFF9AA7B8.toInt(), max(2.5f, r * 0.13f)))
-
-        /* pengendara */
-        val lean = clamp(v.ang * 0.7, -0.5, 0.5)
-        val hx = px(-s.wheelbase * 0.05, s.wheelR * 1.9 + lean * 0.2)
-        val hy = py(-s.wheelbase * 0.05, s.wheelR * 1.9 + lean * 0.2)
-        val hcol = s.driver.color
-        c.dot(hx, hy - r * 0.55f, r * 0.28f, T.fill(hcol))                       // helm
-        c.rr(hx - r * 0.22f, hy - r * 0.35f, r * 0.44f, r * 0.75f, r * 0.16f, T.fill(hcol))  // badan
-        c.drawLine(hx, hy - r * 0.30f, hx + r * 0.5f, hy - r * 0.05f, T.stroke(hcol, max(2f, r * 0.16f)))  // lengan
-        c.drawLine(hx - r * 0.1f, hy + r * 0.35f, hx + r * 0.25f, hy + r * 0.05f, T.stroke(0xFF2A3444.toInt(), max(2f, r * 0.15f))) // kaki
-        c.restore()
+        val ca = cos(v.ang)
+        val sa = sin(v.ang)
+        fun px(ox: Double, oy: Double) = cx + ((ca * ox - sa * oy) * ppm).toFloat()
+        fun py(ox: Double, oy: Double) = cy - ((sa * ox + ca * oy) * ppm).toFloat()
+        val rear = v.wheels.last()
+        val front = v.wheels.first()
+        val rearSx = cx + ((rear.cx - v.posX) * ppm).toFloat()
+        val rearSy = cy - ((rear.cy + v.r - v.posY) * ppm).toFloat()
+        val frontSx = cx + ((front.cx - v.posX) * ppm).toFloat()
+        val frontSy = cy - ((front.cy + v.r - v.posY) * ppm).toFloat()
+        gambarRakitSamping(
+            c, app, ::px, ::py, ppm, v.rpm,
+            rearSx, rearSy, frontSx, frontSy,
+            rear.spinAng, front.spinAng, true
+        )
     }
 
     override fun press(h: Hot?, x: Float, y: Float) {

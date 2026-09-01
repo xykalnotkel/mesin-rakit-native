@@ -102,6 +102,8 @@ class DynoScene(app: App) : Scene(app) {
 
         app.audio.update(dt.toDouble(), rpm, gas, (tq / max(1.0, s.maxTorque)).toDouble(), boost,
             0.0, 0.0, 0.0, cut, false)
+        app.lastRPM = rpm
+        app.lastThr = gas
     }
 
     override fun draw(c: Canvas, w: Float, h: Float) {
@@ -199,11 +201,11 @@ class DynoScene(app: App) : Scene(app) {
         }
 
         /* kontrol */
-        val bw = w * 0.11f
-        val bh = h * 0.11f
-        val by = h * 0.76f
-        idGas = tombol(c, "GAS", w * 0.10f, by, bw, bh, BTN_UTAMA, T.sp(18f), true, 0, pressed.contains(idGas))
-        idRem = tombol(c, "REM", w * 0.22f, by, bw, bh, BTN_BAHAYA, T.sp(18f), true, 0, pressed.contains(idRem))
+        val bw = max(w * 0.12f, 100f)
+        val bh = max(h * 0.12f, 56f)
+        val by = h * 0.74f
+        idGas = tombol(c, "GAS", w * 0.08f, by, bw, bh, BTN_UTAMA, T.sp(20f), true, 0, pressed.contains(idGas))
+        idRem = tombol(c, "REM", w * 0.08f + bw + 12f, by, bw, bh, BTN_BAHAYA, T.sp(20f), true, 0, pressed.contains(idRem))
         c.panel(w * 0.35f, by, w * 0.20f, bh, 12f)
         c.txc("BEBAN ${(beban * 100).toInt()} persen", w * 0.45f, by + 22f, T.sp(13f), C.DIM, F_SEMI)
         c.bar(w * 0.365f, by + 34f, w * 0.17f, 12f, beban.toDouble(), C.AMBER)

@@ -21,23 +21,30 @@ const val BTN_HANTU = 3
 
 abstract class Scene(val app: App) {
     val hot = ArrayList<Hot>()
+    /** salinan yang dibaca thread sentuhan — jangan diutak-atik waktu digambar */
+    @Volatile private var hit: Array<Hot> = emptyArray()
     /** id tombol yang sedang ditekan (bisa lebih dari satu: multi sentuh) */
     val pressed = HashSet<Int>()
     private var nextId = 0
 
     fun begin() { hot.clear(); nextId = 0 }
+    fun kunci() { hit = hot.toTypedArray() }
 
     fun add(x: Float, y: Float, w: Float, h: Float, extra: Int = 0): Int {
         val id = nextId++
-        hot.add(Hot(x, y, w, h, id, extra))
+        val pad = 8f
+        hot.add(Hot(x - pad, y - pad, w + pad * 2f, h + pad * 2f, id, extra))
         return id
     }
 
     fun pick(x: Float, y: Float): Hot? {
-        for (i in hot.size - 1 downTo 0) {
-            val r = hot[i]
-            if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h) return r
-        }
+        val list = hit
+        try {
+            for (i in list.size - 1 downTo 0) {
+                val r = list[i]
+                if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h) return r
+            }
+        } catch (e: Exception) { }
         return null
     }
 
@@ -59,10 +66,11 @@ abstract class Scene(val app: App) {
             style == BTN_BAHAYA -> C.WHITE
             else -> if (terpilih) C.ACC else C.TEXT
         }
-        if (bg != 0) c.rr(x, y, w, h, 10f, T.fill(bg))
-        if (style == BTN_HANTU || terpilih) c.rrs(x, y, w, h, 10f, T.stroke(if (terpilih) C.ACC else C.LINE, 1.6f))
-        else if (style != BTN_UTAMA) c.rrs(x, y, w, h, 10f, T.stroke(C.LINE, 1.2f))
-        c.txc(label, x + w / 2f, y + h / 2f, size, fg, F_SEMI)
+        val rad = min(14f, min(w, h) * 0.28f)
+        if (bg != 0) c.rr(x, y, w, h, rad, T.fill(bg))
+        if (style == BTN_HANTU || terpilih) c.rrs(x, y, w, h, rad, T.stroke(if (terpilih) C.ACC else C.LINE, 1.4f))
+        else if (style != BTN_UTAMA) c.rrs(x, y, w, h, rad, T.stroke(C.LINE, 1.1f))
+        c.txc(label, x + w / 2f, y + h / 2f, max(size, T.sp(13f)), fg, F_SEMI)
         return id
     }
 

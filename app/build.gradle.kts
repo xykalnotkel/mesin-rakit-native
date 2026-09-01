@@ -11,8 +11,8 @@ android {
         applicationId = "id.mesinrakit"
         minSdk = 23
         targetSdk = 34
-        versionCode = 13
-        versionName = "1.4.1"
+        versionCode = 14
+        versionName = "1.4.2"
         resourceConfigurations += setOf("in", "en")
     }
 

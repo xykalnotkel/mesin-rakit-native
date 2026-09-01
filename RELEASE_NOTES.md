@@ -30,6 +30,17 @@ Cara main
 - DYNO: tahan GAS, atur BEBAN, lihat kurva torsi dan tenaga.
 - JALAN: tombol GAS dan REM di layar, Q dan E buat oper gigi, R buat bangun.
 
+Yang baru di 1.4.2
+- Crash waktu tarik part di bengkel sudah ditutup: daftar tombol tidak
+  lagi diutak-atik bersamaan dengan sentuhan.
+- Kendaraan tidak lagi tergambar terbalik. Roda di bawah, tangki dan jok
+  di atas.
+- Tampak rakitan sekarang motor sungguhan: mesin, piston, knalpot, tangki,
+  jok, fork, bukan tumpukan kotak. Piston, stang piston, dan kruk bergerak
+  mengikuti putaran mesin.
+- Suara lebih gahar: bass lebih dalam, letupan lebih keras.
+- Tombol lebih besar dan gampang dipencet.
+
 Yang baru di 1.4.1
 - Format desain MRPACK1. Menu punya tombol Salin kode dan Tempel.
   Desain rangka dan body dari studio web (mesin.xyspace.my.id/drawing)

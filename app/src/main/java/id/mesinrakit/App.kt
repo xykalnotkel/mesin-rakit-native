@@ -39,6 +39,8 @@ class App(val ctx: Context, val view: GameView) {
     /* dipakai layar jalan: status terakhir buat suara */
     var lastRPM = 1000.0
     var lastThr = 0.0
+    /** waktu global buat animasi piston, kruk, velg */
+    var t = 0.0
 
     fun layar(nama: String): Scene = scenes.getOrPut(nama) {
         when (nama) {
@@ -118,6 +120,7 @@ class App(val ctx: Context, val view: GameView) {
     }
 
     fun update(dt: Float) {
+        t += dt.toDouble()
         scene.update(dt)
         toast.update(dt)
         val v = vehicle
@@ -138,6 +141,7 @@ class App(val ctx: Context, val view: GameView) {
     fun draw(c: Canvas, w: Float, h: Float) {
         scene.begin()
         scene.draw(c, w, h)
+        scene.kunci()
         toast.draw(c, w, h)
     }
 

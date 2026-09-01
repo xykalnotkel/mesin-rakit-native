@@ -67,7 +67,7 @@ class AudioEngine {
     @Volatile var gAir = 0.0
     @Volatile var gCut = false
     @Volatile var gMogok = false
-    @Volatile var master = 0.85f
+    @Volatile var master = 0.94f
 
     /* kejadian suara */
     private var popTimer = 0.0
@@ -200,7 +200,7 @@ class AudioEngine {
         /* nada dasar dari panjang pipa, diameter, dan isi silinder */
         val diaFac = sqrt(0.05 / max(0.02, s.exhDia))
         fRes = (190.0 / max(0.35, s.exhLen * diaFac)) * e.f0 * (125.0 / max(40.0, dispCc / max(1, cyl))).pow(0.16)
-        decayBase = 0.030 * e.decay * (1.0 + muffling * 0.4)
+        decayBase = 0.022 * e.decay * (1.0 + muffling * 0.16)
         renderCycles()
     }
 
@@ -249,7 +249,7 @@ class AudioEngine {
     /** satu ledakan: deretan partial, desis, plus gendang atau dengung logam */
     private fun bang(out: FloatArray, start: Int, n: Int, gain: Double, rnd: Rnd, idle: Boolean) {
         val len = (n * if (idle) 0.55 else 0.85).toInt()
-        val noiseAmp = noiseMix * (if (idle) 0.7 else 1.0) * (1.0 - muffling * 0.45)
+        val noiseAmp = noiseMix * (if (idle) 0.85 else 1.15) * (1.0 - muffling * 0.18)
         for (i in 0 until len) {
             val k = (start + i) % n
             val t = i.toDouble() / sr
@@ -262,12 +262,15 @@ class AudioEngine {
             }
             /* desis ledakan */
             val nt = exp(-t / max(0.003, decayBase * 0.22))
-            v += (rnd.next() * 2 - 1) * noiseAmp * nt * 0.55
+            v += (rnd.next() * 2 - 1) * noiseAmp * nt * 0.72
+            /* sub bass pukulan */
+            v += sin(TAU * fRes * 0.5 * t) * 0.55 * exp(-t / 0.038)
+            v += sin(TAU * fRes * t) * 0.22 * exp(-t / 0.018)
             /* gendang (drumben) */
             if (boomAmt > 0.01) {
                 val bt = exp(-t / max(0.02, decayBase * 2.6))
-                v += sin(TAU * boomHz * t) * boomAmt * bt * 0.9
-                v += sin(TAU * boomHz * 1.62 * t) * boomAmt * bt * 0.35
+                v += sin(TAU * boomHz * t) * boomAmt * bt * 1.25
+                v += sin(TAU * boomHz * 1.62 * t) * boomAmt * bt * 0.50
             }
             /* dengung logam (thai) */
             if (ringAmt > 0.01) {
@@ -283,17 +286,17 @@ class AudioEngine {
             /* karakter mesin */
             if (diesel) {
                 val ct = exp(-t / 0.012)
-                v += (rnd.next() * 2 - 1) * 0.55 * ct
-                v += sin(TAU * fRes * 4.2 * t) * 0.30 * ct
+                v += (rnd.next() * 2 - 1) * 0.78 * ct
+                v += sin(TAU * fRes * 4.2 * t) * 0.38 * ct
             }
             if (rotary) {
                 val pt = exp(-t / 0.010)
-                v += (rnd.next() * 2 - 1) * 0.30 * pt          // desis port
-                v += sin(TAU * fRes * 6.1 * t) * 0.22 * pt      // siulan port
-                v *= 0.82
+                v += (rnd.next() * 2 - 1) * 0.42 * pt
+                v += sin(TAU * fRes * 6.1 * t) * 0.30 * pt
+                v *= 0.90
             }
-            if (twoStroke) v *= 1.12
-            out[k] += (v * gain * 0.34).toFloat()
+            if (twoStroke) v *= 1.28
+            out[k] += (v * gain * 0.52).toFloat()
         }
     }
 
@@ -372,7 +375,7 @@ class AudioEngine {
                 }
 
                 /* --- isapan udara --- */
-                val inAmp = if (gMogok) 0.0 else (0.012 + 0.075 * thr * (0.3 + rpmN)) * (1 + boost * 0.5)
+                val inAmp = if (gMogok) 0.0 else (0.018 + 0.12 * thr * (0.3 + rpmN)) * (1 + boost * 0.5)
                 val nz = RND.next() * 2 - 1
                 s += fIntake.process(nz) * inAmp
                 s += fIntake2.process(nz) * inAmp * 0.42
@@ -393,7 +396,7 @@ class AudioEngine {
 
                 /* --- mekanik mesin --- */
                 if (!gMogok) {
-                    val mAmp = 0.010 + 0.020 * rpmN + knock * 0.03
+                    val mAmp = 0.018 + 0.032 * rpmN + knock * 0.04
                     s += fMech.process(nz) * mAmp
                     /* ketukan saat kompresi terlalu tinggi */
                     knockTimer -= 1.0 / sr
@@ -445,7 +448,7 @@ class AudioEngine {
 
                 /* --- lembutkan dengan limiter --- */
                 s *= master
-                val v = tanh(s * 1.25).toFloat()
+                val v = tanh(s * 1.85).toFloat()
                 mono[i] = v
                 out[i * 2] = v
                 out[i * 2 + 1] = v

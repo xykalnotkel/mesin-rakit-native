@@ -115,7 +115,7 @@ class GameView(ctx: Context) : SurfaceView(ctx), SurfaceHolder.Callback {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
                 val i = e.actionIndex
                 val pid = e.getPointerId(i)
-                val h = app.scene.pick(e.getX(i), e.getY(i))
+                val h = try { app.scene.pick(e.getX(i), e.getY(i)) } catch (ex: Exception) { null }
                 ptr.put(pid, h?.id ?: -1)
                 if (h != null) ptrHot[pid] = h
                 app.sentuh(h, e.getX(i), e.getY(i))
@@ -123,7 +123,7 @@ class GameView(ctx: Context) : SurfaceView(ctx), SurfaceHolder.Callback {
             MotionEvent.ACTION_MOVE -> {
                 for (i in 0 until e.pointerCount) {
                     val pid = e.getPointerId(i)
-                    val h = app.scene.pick(e.getX(i), e.getY(i))
+                    val h = try { app.scene.pick(e.getX(i), e.getY(i)) } catch (ex: Exception) { null }
                     val old = ptr.get(pid, -1)
                     val baru = h?.id ?: -1
                     if (old != baru) {

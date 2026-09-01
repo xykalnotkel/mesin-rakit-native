@@ -92,8 +92,7 @@ class BengkelScene(app: App) : Scene(app) {
                     if (cat != null) {
                         c.rr(x + 2f, y + 2f, cell - 4f, cell - 4f, 5f, T.fill(C.PAINTS[cat]))
                     } else {
-                        c.rr(x + 3f, y + 3f, cell - 6f, cell - 6f, 5f, T.fill(C.BG2))
-                        c.rrs(x + 3f, y + 3f, cell - 6f, cell - 6f, 5f, T.stroke(C.LINE, 1f))
+                        c.dot(x + cell * 0.5f, y + cell * 0.5f, 1.4f, T.fill(C.LINE))
                     }
                 }
             }
@@ -124,24 +123,24 @@ class BengkelScene(app: App) : Scene(app) {
 
         /* palet bawah */
         c.rr(0f, tList, w, h - tList, 0f, T.fill(C.BG2))
-        idMode[0] = tombol(c, "Pasang", 20f, tList + 8f, 96f, 34f, BTN_NORMAL, T.sp(13f), true, 0, mode == 0)
-        idMode[1] = tombol(c, "Cat", 124f, tList + 8f, 78f, 34f, BTN_NORMAL, T.sp(13f), true, 0, mode == 1)
-        idMode[2] = tombol(c, "Hapus", 210f, tList + 8f, 90f, 34f, BTN_NORMAL, T.sp(13f), true, 0, mode == 2)
-        idLengkapi = tombol(c, "Lengkapi", 312f, tList + 8f, 104f, 34f, BTN_UTAMA, T.sp(13f))
-        idBersih = tombol(c, "Kosongkan", 424f, tList + 8f, 112f, 34f, BTN_BAHAYA, T.sp(13f))
-        idServis = tombol(c, "Servis", 544f, tList + 8f, 92f, 34f, BTN_NORMAL, T.sp(13f))
-        idServisKurang = tombol(c, "Servis 45%", 644f, tList + 8f, 112f, 34f, BTN_NORMAL, T.sp(13f))
-        idPreset = tombol(c, "Preset", 764f, tList + 8f, 92f, 34f, BTN_HANTU, T.sp(13f))
+        idMode[0] = tombol(c, "Pasang", 20f, tList + 8f, 110f, 44f, BTN_NORMAL, T.sp(14f), true, 0, mode == 0)
+        idMode[1] = tombol(c, "Cat", 138f, tList + 8f, 86f, 44f, BTN_NORMAL, T.sp(14f), true, 0, mode == 1)
+        idMode[2] = tombol(c, "Hapus", 232f, tList + 8f, 96f, 44f, BTN_NORMAL, T.sp(14f), true, 0, mode == 2)
+        idLengkapi = tombol(c, "Lengkapi", 336f, tList + 8f, 118f, 44f, BTN_UTAMA, T.sp(14f))
+        idBersih = tombol(c, "Kosongkan", 462f, tList + 8f, 124f, 44f, BTN_BAHAYA, T.sp(14f))
+        idServis = tombol(c, "Servis", 594f, tList + 8f, 100f, 44f, BTN_NORMAL, T.sp(14f))
+        idServisKurang = tombol(c, "Servis 45%", 702f, tList + 8f, 124f, 44f, BTN_NORMAL, T.sp(14f))
+        idPreset = tombol(c, "Preset", 834f, tList + 8f, 100f, 44f, BTN_HANTU, T.sp(14f))
 
         /* warna cat */
-        var wx = 880f
+        var wx = 948f
         for (i in C.PAINTS.indices) {
             val dipilih = app.build.colorIdx == i
-            c.rr(wx, tList + 10f, 30f, 30f, 6f, T.fill(C.PAINTS[i]))
-            if (dipilih) c.rrs(wx - 2f, tList + 8f, 34f, 34f, 8f, T.stroke(C.WHITE, 2f))
-            idWarna[i] = add(wx, tList + 10f, 30f, 30f)
-            wx += 34f
-            if (wx > w - 40f) break
+            c.rr(wx, tList + 10f, 40f, 40f, 10f, T.fill(C.PAINTS[i]))
+            if (dipilih) c.rrs(wx - 3f, tList + 7f, 46f, 46f, 12f, T.stroke(C.WHITE, 2f))
+            idWarna[i] = add(wx, tList + 10f, 40f, 40f)
+            wx += 46f
+            if (wx > w - 44f) break
         }
 
         /* tab kategori */
@@ -155,7 +154,7 @@ class BengkelScene(app: App) : Scene(app) {
         }
 
         /* daftar part */
-        val ly = ky + 38f
+        val ly = ky + 48f
         val lh = h - ly - 10f
         val daftar = partsByCat(kat)
         val iw = 108f
